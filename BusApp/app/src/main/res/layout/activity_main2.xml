@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mju01"
+    android:orientation="vertical"
+    tools:context=".MainActivity2">
+
+    <TimePicker
+        android:id="@+id/timepicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:theme="@style/time_picker"
+        android:timePickerMode="spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="70dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/curr_time"
+        android:onClick="setCurrTime"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timepicker"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/curtimeset"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="117dp"
+        android:layout_height="43dp"
+        android:contentDescription="@string/main_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/name_logo" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:entries="@array/list01"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toTopOf="@+id/spinner2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timepicker"
+        app:layout_constraintVertical_bias="0.787" />
+
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:entries="@array/list01"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:text="@string/arrival_text"
+        app:layout_constraintBottom_toTopOf="@+id/spinner2"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="414dp"
+        android:layout_height="61dp"
+        android:contentDescription="@string/search_bus"
+        android:onClick="SearchBus"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/search"
+        tools:ignore="ImageContrastCheck" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="55dp"
+        android:text="@string/start_text"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="190dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- 시내버스 -->
+        <RadioButton
+            android:id="@+id/radioButton4"
+            android:layout_width="95dp"
+            android:layout_height="70dp"
+            android:background="@drawable/radiobt_change"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:onClick="SelectCityBus"
+            android:text="@string/bus_text"
+            android:textColor="#212121"
+            tools:layout_editor_absoluteX="170dp"
+            tools:layout_editor_absoluteY="593dp" />
+
+        <!-- 명지대역 버스 -->
+        <RadioButton
+            android:id="@+id/radioButton5"
+            android:layout_width="95dp"
+            android:layout_height="70dp"
+            android:background="@drawable/radiobt_change"
+            android:button="@null"
+            android:gravity="center"
+            android:onClick="SelectMjBus"
+            android:text="@string/mjbus_text"
+            app:layout_constraintEnd_toEndOf="@+id/radioGroup"
+            tools:layout_editor_absoluteY="565dp" />
+    </RadioGroup>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
