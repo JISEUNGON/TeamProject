@@ -2,9 +2,15 @@ package com.example.busapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class BusActivity3 extends AppCompatActivity {
 
@@ -35,7 +41,7 @@ public class BusActivity3 extends AppCompatActivity {
 
         arrival_txt = findViewById(R.id.textView7);
         arrival_txt.setText(arrival);
-
+        
     }
 
 }
