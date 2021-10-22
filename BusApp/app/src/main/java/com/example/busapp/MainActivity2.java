@@ -1,12 +1,13 @@
 package com.example.busapp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,11 +17,6 @@ import java.util.Calendar;
 public class MainActivity2 extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePicker.OnTimeChangedListener{
 
     //////////////변수들//////////////
-
-    // 라디오 버튼 목록
-    Button city_bt;
-    Button mju_bt;
-
     // 타임피커
     TimePicker timepicker;
     Calendar calendar;
@@ -37,12 +33,6 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        // 버튼 탐색 후 버튼 지정
-        city_bt =  findViewById(R.id.radioButton4);
-        mju_bt =  findViewById(R.id.radioButton5);
-        city_bt.setSelected(true);
-        mju_bt.setSelected(false);
-
         // 출발지 스피너 탐색
         sp1 = findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.list01, android.R.layout.simple_spinner_item);
@@ -50,9 +40,10 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         sp1.setAdapter(adapter);
         sp1.setOnItemSelectedListener(this);
 
+
         // 도착지 스피너 탐색
         sp2 = findViewById(R.id.spinner2);
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.list01, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.list03, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp2.setAdapter(adapter2);
         sp2.setOnItemSelectedListener(this);
@@ -62,6 +53,8 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         // 초기 시간, 분 설정
         timepicker.setCurrentHour(12);
         timepicker.setCurrentMinute(55);
+
+
 
         // canlendar설정
         calendar = Calendar.getInstance();
@@ -93,53 +86,13 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         startActivity(intent);
     }
 
-    // 시내버스 버튼 클릭후
-    public void SelectCityBus(View v){
-        // 출발지 스피너 탐색
-        Spinner sp1 = findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.list01, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sp1.setAdapter(adapter);
-        sp1.setOnItemSelectedListener(this);
 
-        // 도착지 스피너 탐색
-        Spinner sp2 = findViewById(R.id.spinner2);
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.list01, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sp2.setAdapter(adapter2);
-        sp2.setOnItemSelectedListener(this);
-
-        // 버튼이미지 변경
-        city_bt.setSelected(true);
-        mju_bt.setSelected(false);
-    }
-
-    // 명지대역 버스 클릭후
-    public void SelectMjBus(View V){
-
-        // 출발지 스피너 탐색
-        Spinner sp1 = findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.list02, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sp1.setAdapter(adapter);
-        sp1.setOnItemSelectedListener(this);
-
-        // 도착지 스피너 탐색
-        Spinner sp2 = findViewById(R.id.spinner2);
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.list02, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sp2.setAdapter(adapter2);
-        sp2.setOnItemSelectedListener(this);
-
-        // 버튼 이미지 변경
-        city_bt.setSelected(false);
-        mju_bt.setSelected(true);
-
-    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+        // 글씨 흰색으로 변경
+        ((TextView)parent.getChildAt(0)).setTextColor(Color.WHITE);
     }
 
 
@@ -152,6 +105,8 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
         //h\\ = String.valueOf(hourOfDay);
         //m = String.valueOf(minute);
+
+        ((TextView)view.getChildAt(0)).setTextColor(Color.WHITE);
 
 
     }

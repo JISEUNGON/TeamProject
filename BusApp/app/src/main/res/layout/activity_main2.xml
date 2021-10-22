@@ -50,35 +50,37 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="40dp"
         android:entries="@array/list01"
         android:minHeight="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/spinner2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timepicker"
-        app:layout_constraintVertical_bias="0.787" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.569" />
 
     <Spinner
         android:id="@+id/spinner2"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
         android:entries="@array/list01"
         android:minHeight="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.729" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="55dp"
+        android:textColor="@color/white"
         android:text="@string/arrival_text"
+
         app:layout_constraintBottom_toTopOf="@+id/spinner2"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -101,51 +103,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="55dp"
         android:text="@string/start_text"
+        android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/spinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButton"
         app:layout_constraintVertical_bias="1.0" />
-
-
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="190dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="30dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <!-- 시내버스 -->
-        <RadioButton
-            android:id="@+id/radioButton4"
-            android:layout_width="95dp"
-            android:layout_height="70dp"
-            android:background="@drawable/radiobt_change"
-            android:button="@null"
-            android:checked="true"
-            android:gravity="center"
-            android:onClick="SelectCityBus"
-            android:text="@string/bus_text"
-            android:textColor="#212121"
-            tools:layout_editor_absoluteX="170dp"
-            tools:layout_editor_absoluteY="593dp" />
-
-        <!-- 명지대역 버스 -->
-        <RadioButton
-            android:id="@+id/radioButton5"
-            android:layout_width="95dp"
-            android:layout_height="70dp"
-            android:background="@drawable/radiobt_change"
-            android:button="@null"
-            android:gravity="center"
-            android:onClick="SelectMjBus"
-            android:text="@string/mjbus_text"
-            app:layout_constraintEnd_toEndOf="@+id/radioGroup"
-            tools:layout_editor_absoluteY="565dp" />
-    </RadioGroup>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

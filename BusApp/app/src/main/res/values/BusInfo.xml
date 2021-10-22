@@ -45,15 +45,13 @@
         <item>19:30</item>
     </string-array>
     <string-array name="BUS_MJUSTATION_STATIONS">
-        <items>
-            <item>상공회의소</item>
-            <item>진입로(명지대역방향)</item>
-            <item>명지대역</item>
-            <item>진입로(명지대방향)</item>
-            <item>이마트</item>
-            <item>명진당</item>
-            <item>제3공학관</item>
-        </items>
+        <item>상공회의소</item>
+        <item>진입로(명지대역방향)</item>
+        <item>명지대역</item>
+        <item>진입로(명지대방향)</item>
+        <item>이마트</item>
+        <item>명진당</item>
+        <item>제3공학관</item>
     </string-array>
     <string-array name="BUS_MJUSTATION_TIMEREQUIRE">
         <item>1</item>
