@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="BUS_MJUSTATION_TIMETABLE">
+        <item>8:00</item>
+        <item>8:15</item>
+        <item>8:20</item>
+        <item>8:35</item>
+        <item>8:45</item>
+        <item>9:00</item>
+        <item>9:15</item>
+        <item>9:30</item>
+        <item>9:35</item>
+        <item>9:40</item>
+        <item>9:55</item>
+        <item>10:20</item>
+        <item>10:30</item>
+        <item>10:45</item>
+        <item>11:00</item>
+        <item>11:25</item>
+        <item>11:45</item>
+        <item>11:55</item>
+        <item>12:05</item>
+        <item>12:30</item>
+        <item>12:45</item>
+        <item>13:25</item>
+        <item>13:40</item>
+        <item>14:00</item>
+        <item>14:10</item>
+        <item>14:30</item>
+        <item>14:50</item>
+        <item>15:00</item>
+        <item>15:10</item>
+        <item>15:25</item>
+        <item>15:55</item>
+        <item>16:10</item>
+        <item>16:25</item>
+        <item>16:50</item>
+        <item>17:00</item>
+        <item>17:10</item>
+        <item>17:20</item>
+        <item>17:45</item>
+        <item>18:00</item>
+        <item>19:00</item>
+        <item>19:20</item>
+        <item>19:30</item>
+    </string-array>
+    <string-array name="BUS_MJUSTATION_STATIONS">
+        <item>상공회의소</item>
+        <item>진입로(명지대역방향)</item>
+        <item>명지대역</item>
+        <item>진입로(명지대방향)</item>
+        <item>이마트</item>
+        <item>명진당</item>
+        <item>제3공학관</item>
+    </string-array>
+    <string-array name="BUS_MJUSTATION_TIMEREQUIRE">
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="BUS_GIHEUNG_TIMETABLE">
+        <item>8:00</item>
+        <item>9:00</item>
+        <item>10:00</item>
+        <item>11:00</item>
+        <item>12:00</item>
+        <item>13:00</item>
+        <item>14:00</item>
+        <item>15:00</item>
+        <item>16:00</item>
+        <item>17:00</item>
+    </string-array>
+    <string-array name="BUS_GIHEUNG_STATIONS">
+        <item>기흥역</item>
+    </string-array>
+    <string-array name="BUS_GIHEUNG_TIMEREQUIRE">
+        <item>15</item>
+    </string-array>
+    <string-array name="BUS_CITY_TIMETABLE">
+        <item>8:05</item>
+        <item>8:55</item>
+        <item>10:10</item>
+        <item>11:20</item>
+        <item>13:10</item>
+        <item>14:20</item>
+        <item>15:40</item>
+        <item>16:35</item>
+        <item>18:10</item>
+        <item>20:00</item>
+    </string-array>
+    <string-array name="BUS_CITY_STATIONS">
+        <item>상공회의소</item>
+        <item>진입로(시내방향)</item>
+        <item>동부경찰서</item>
+        <item>용인시장</item>
+        <item>중앙공영주차장</item>
+        <item>진입로(명지대방향)</item>
+        <item>이마트</item>
+        <item>제1공학관</item>
+        <item>3공학관</item>
+    </string-array>
+    <string-array name="BUS_CITY_TIMEREQUIRE">
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+    </string-array>
+</resources>
+

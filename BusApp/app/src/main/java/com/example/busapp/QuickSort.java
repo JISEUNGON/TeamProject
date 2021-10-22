@@ -24,14 +24,13 @@ public class QuickSort {
         x[j] = temp;
     }
     private static int partition(int low, int high, String[] x) {
-        int pivot = parseInt(x[low]);
         int i = low + 1;
         int j = high;
 
         while (i <= j) {
-            if (parseInt(x[i]) <= pivot) {
+            if (DateFormat.compare(x[i], x[low]) <= 0) {
                 i++;
-            } else if(parseInt(x[j]) > pivot) {
+            } else if(DateFormat.compare(x[j], x[low]) > 0) {
                 j--;
             } else {
                 swap(i, j, x);

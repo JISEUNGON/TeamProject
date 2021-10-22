@@ -1,3 +1,6 @@
+package com.example.busapp;
+
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -62,3 +65,4 @@ public class DateFormat {
         return srcTotalMin - targetTotalMin;
     }
 }
+
