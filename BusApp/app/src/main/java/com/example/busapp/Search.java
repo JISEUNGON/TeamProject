@@ -1,3 +1,5 @@
+package com.example.busapp;
+
 public class Search {
     public static String[] BinarySearch(String time, String[] timeTable) {
         int low = 0;
