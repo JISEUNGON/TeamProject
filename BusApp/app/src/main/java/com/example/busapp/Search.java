@@ -7,9 +7,26 @@ public class Search {
         int mid;
         String[] neighborTime = new String[2];
         while(low <= high) {
+
             mid = (low + high) / 2;
-            neighborTime[0] = timeTable[Math.max(mid - 1, 0)];
-            neighborTime[1] = timeTable[mid];
+
+            /**
+             * BinarySearch Miss 대비
+             * 결국 최종 케이스는 3가지 중 하나,
+             *   1. time < timeTable[low] <= timeTable[high]
+             *   2. timeTable[low] < time < timeTable[high]
+             *   3. timeTable[low] <= timeTable[high] < time
+             */
+            if (DateFormat.compare(timeTable[low], time) > 0) { // case 1
+                neighborTime[0] = timeTable[Math.max(0, low - 1)];
+                neighborTime[1] = timeTable[low];
+            } else if (DateFormat.compare(timeTable[high], time) < 0){ // case 3
+                neighborTime[0] = timeTable[high];
+                neighborTime[1] = timeTable[Math.min(timeTable.length - 1, high + 1)];
+            } else { //case 2
+                neighborTime[0] = timeTable[low];
+                neighborTime[1] = timeTable[high];
+            }
 
             if (DateFormat.compare(timeTable[mid],time) == 0) { // BinarySearch HIT!
                 // [time 직전에 출발했던 버스, time에 출발하는 버스]
