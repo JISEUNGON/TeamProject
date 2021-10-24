@@ -1,5 +1,6 @@
 package com.example.busapp;
 
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -56,13 +57,9 @@ public class DateFormat {
      *          음수  if src < target
      */
     public static int compare(String src, String target) {
-        String[] srcArray = src.split(":");
-        int srcTotalMin = Integer.parseInt(srcArray[0]) * 60 + Integer.parseInt(srcArray[1]);
+        DateFormat srcTime = new DateFormat(src);
+        DateFormat destTime = new DateFormat(target);
 
-        String[] targetArray = target.split(":");
-        int targetTotalMin = Integer.parseInt(targetArray[0]) * 60 + Integer.parseInt(targetArray[1]);
-
-        return srcTotalMin - targetTotalMin;
+        return srcTime.getTotalMin() - destTime.getTotalMin();
     }
 }
-
