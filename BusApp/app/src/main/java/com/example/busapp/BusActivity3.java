@@ -62,6 +62,9 @@ public class BusActivity3 extends AppCompatActivity {
         
         hour = intent.getStringExtra("hour");
         min = intent.getStringExtra("min");
+        if(Integer.parseInt(min)<10){
+            min = "0" + min;
+        }
         start = intent.getStringExtra("start");
         arrival = intent.getStringExtra("arrival");
         targetTime = new DateFormat(hour + ":" + min);
@@ -71,24 +74,26 @@ public class BusActivity3 extends AppCompatActivity {
         if(Arrays.asList(MJUSTATION_STATIONS).contains(start)&&Arrays.asList(CITY_STATIONS).contains(start)){
             String [] SORTED_INTEGRATED_TIMETABLE = integrateTimeTable();
             startTimes = Search.BinarySearch(targetTime.getTime(), SORTED_INTEGRATED_TIMETABLE);
-
+            Log.d("노선", "MJ,CITY");
             //2차 알고리즘 작성: 가까운 셔틀 버스 출발 시간을 이욯하여, start 정류장에 도착할 시간 구하기
             //input: 타겟 시간, 버스 출발 시간(직전 버스, 이후 버스), 정류장, TIME_REQUIRE 배열
             //시작 정류장에서부터, 현재정류장까지 걸리는 시간을 구한다
             //직전 버스 출발 시간에 위에서 구한 시간을 더했을 때, 타겟 시간 후라면 이 시간이 도착예정 시간
             //타겟 시간 전이라면, 이미 버스가 지나간 것이므로, 이후 버스에 대해서 위에서 구한 시간을 더하면 이 시간이 도착예정 시간'
 
-            arrivalTime = compareArrivalTime(start, startTimes);
+            arrivalTime = compareArrivalTime(start, startTimes, targetTime.getTime());
         }
         //출발지 정류장이 만약 CITYSTATION_STATIONS에만 있다면 : 명지대역버스만 지나가는 정류장
         else if(Arrays.asList(CITY_STATIONS).contains(start)){
             startTimes = Search.BinarySearch(targetTime.getTime(), CITY_TIMETABLE);
-            arrivalTime = compareArrivalTime(start, startTimes);
+            arrivalTime = compareArrivalTime(start, startTimes, targetTime.getTime());
+            Log.d("노선", "CITY");
         }
         //출발지 정류장이 만약 MJSTATION_STATIONS에만 있다면: 시내버스만 지나가는 정류장
         else{
             startTimes = Search.BinarySearch(targetTime.getTime(), MJUSTATION_TIMETABLE);
-            arrivalTime = compareArrivalTime(start, startTimes);
+            arrivalTime = compareArrivalTime(start, startTimes, targetTime.getTime());
+            Log.d("노선", "MJ");
         }
         
         //테스트 데이터 출력
@@ -160,15 +165,15 @@ public class BusActivity3 extends AppCompatActivity {
     //도착 버스 시간 비교 메서드
     //INPUT : 도착 정류장, 2개의 버스출발시간(타겟시간 이전버스, 타겟시간 이후버스)
     //직전 버스, 이후 버스 중 어떤 버스가 먼저 도착할 지 판단한 후 먼저 도착하는 버스의 도착시간을 반환한다.
-    public DateFormat compareArrivalTime(String startStation, String [] bustTime){
+    public DateFormat compareArrivalTime(String startStation, String [] startTimes, String targetTime){
 
         DateFormat arrivalTime;
 
-        DateFormat bus1ArrivalTime = getArrivalTime(startStation, bustTime[0]);
-        DateFormat bus2ArrivalTime = getArrivalTime(startStation, bustTime[1]);
+        DateFormat bus1ArrivalTime = getArrivalTime(startStation, startTimes[0]);
+        DateFormat bus2ArrivalTime = getArrivalTime(startStation, startTimes[1]);
 
         //이전에 출발한 버스 시간 > 타겟 시간 : 아직 도착 전이기 때문에 ArrivalTime은 이전에 출발한 버스가 도착할 시간이 된다.
-        if(DateFormat.compare(bus1ArrivalTime.getTime(), targetTime.getTime()) > 0){
+        if(DateFormat.compare(bus1ArrivalTime.getTime(), targetTime) > 0){
             arrivalTime = bus1ArrivalTime;
         }
         //이전에 출발한 버스 시간 < 타겟 시간 : ArrivalTime은 이후에 출발한 버스가 도착할 시간이 된다.
