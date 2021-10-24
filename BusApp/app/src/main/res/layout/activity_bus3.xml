@@ -95,6 +95,17 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="424dp"
+        android:text="출발지"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.304"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -104,5 +115,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.138"
         app:layout_constraintStart_toStartOf="parent" />
-
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="568dp"
+        android:text="남은시간"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.304"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
