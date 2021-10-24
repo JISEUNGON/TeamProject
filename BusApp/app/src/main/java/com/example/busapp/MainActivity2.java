@@ -86,7 +86,9 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         startActivity(intent);
     }
 
-
+    public void showBusInfo(View v) {
+        startActivity(new Intent(this, BusInfoActivity.class));
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

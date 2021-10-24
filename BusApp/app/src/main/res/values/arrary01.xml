@@ -15,4 +15,8 @@
         <item>제1공학관</item>
         <item>제3공학관</item>
     </string-array>
+    <string-array name="busCat">
+        <item>명지대역</item>
+        <item>시내</item>
+    </string-array>
 </resources>
