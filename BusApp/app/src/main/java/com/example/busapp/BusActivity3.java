@@ -1,7 +1,11 @@
 package com.example.busapp;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,6 +18,7 @@ import net.daum.mf.map.api.MapView;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -118,7 +123,19 @@ public class BusActivity3 extends AppCompatActivity {
         time_txt.setText(DateFormat.compare(arrivalTime.getTime(), targetTime.getTime()) + "분");
 
 
-        // 지도 코드
+        /**
+         * 지도를 사용하기 위한 HashKey 발급 함수입니다.
+         * getAppKeyHash();
+         * 실행 시, Log에 HashKey가 발행될텐데, 이 값을 황규도에게 알려주세요
+         * 제가 등록해야 실행이 될겁니다.
+         */
+         // getAppKeyHash();
+
+        /**
+         * 지도 코드 시작 부분입니다.
+         * AVD(에뮬레이터)에서는 동작하지 않으니,
+         * 만약에 에뮬레이터 실행이 필요한 경우 해당 코드를 주석처리해주시기 바랍니다.
+         */
         MapView mapView = new MapView(this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.mapView);
 
@@ -126,8 +143,8 @@ public class BusActivity3 extends AppCompatActivity {
         markerManager.setMarkers(true, true);
         Double[] startPosition = markerManager.getPosition(start);
         mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(startPosition[0], startPosition[1]), 1,true);
-
         mapViewContainer.addView(mapView);
+        // 지도 코드 끝
     }
 
     //시간표 통합 메서드
@@ -198,4 +215,23 @@ public class BusActivity3 extends AppCompatActivity {
         }
         return arrivalTime;
     }
+
+    // KEY 발급을 위한...
+    private void getAppKeyHash() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md;
+                md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String something = new String(Base64.encode(md.digest(), 0));
+                Log.e("Hash key", something);
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            Log.e("name not found", e.toString());
+        }
+    }
+
+
 }
