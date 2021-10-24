@@ -3,8 +3,7 @@
     <string-array name="list01">
         <item>정류장</item>
         <item>상공회의소</item>
-        <item>진입로(명지대역방향)</item>
-        <item>진입로(시내방향)</item>
+        <item>진입로</item>
         <item>진입로(명지대방향)</item>
         <item>명지대역</item>
         <item>동부경찰서</item>

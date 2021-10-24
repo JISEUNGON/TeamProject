@@ -12,6 +12,6 @@
     <string name="search_bus">버스찾기</string>
     <string name="start_text">출발지</string>
     <string name="arrival_text">도착지</string>
-    <string name="mjbus_text">먕지대역 버스</string>
+    <string name="mjbus_text">명지대역 버스</string>
     <string name="bus_text">시내버스</string>
 </resources>
