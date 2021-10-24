@@ -1,6 +1,13 @@
 package com.example.busapp;
 
 public class Search {
+    /**
+     * time이 주어지면, timeTable에서 값을 검색합니다.
+     * Naive BinarySearch와 다르게, 값이 리스트에 없는 경우 인접한 값을 되돌려 줍니다.  
+     * @param time 찾으려는 시간
+     * @param timeTable 참조하는 시간
+     * @return String[time 직전에 출발했던 버스, time에 출발하는 버스]
+     */
     public static String[] BinarySearch(String time, String[] timeTable) {
         int low = 0;
         int high = timeTable.length - 1;
@@ -41,5 +48,19 @@ public class Search {
         // BinarySearch MISS!
         // [time 직전에 출발한 버스, time 이후에 출발할 버스]
         return neighborTime;
+    }
+
+    /**
+     * targetStation이 stationTable에 속하는지 확인합니다.
+     * @param targetStation 찾으려는 정류장
+     * @param stationTable 참조하는 정류장
+     * @return true : 정류장이 있는 경우
+     *         false: 정류장이 없는 경우
+     */
+    public static boolean hasStation(String targetStation, String[] stationTable) {
+        for(String station: stationTable) {
+            if(targetStation.equals(station)) return true;
+        }
+        return false;
     }
 }

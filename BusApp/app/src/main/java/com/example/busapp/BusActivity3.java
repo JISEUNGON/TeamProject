@@ -3,9 +3,13 @@ package com.example.busapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -71,7 +75,7 @@ public class BusActivity3 extends AppCompatActivity {
 
         //타겟시간에 대한 가까운 셔틀 버스찾기 : 1차 알고리즘 작성 (메서드 분리 이전, 기능 별 항목 구현)
         //MJUSTATION과 CITYSTATION 모두 포함한다면: 두 버스 모두 지나가는 정류장 (이 때 시간을 정렬해서 새로운 시간표를 만든다)
-        if(Arrays.asList(MJUSTATION_STATIONS).contains(start)&&Arrays.asList(CITY_STATIONS).contains(start)){
+        if(Search.hasStation(start, MJUSTATION_STATIONS) && Search.hasStation(start, CITY_STATIONS)) {
             String [] SORTED_INTEGRATED_TIMETABLE = integrateTimeTable();
             startTimes = Search.BinarySearch(targetTime.getTime(), SORTED_INTEGRATED_TIMETABLE);
             Log.d("노선", "MJ,CITY");
@@ -84,7 +88,7 @@ public class BusActivity3 extends AppCompatActivity {
             arrivalTime = compareArrivalTime(start, startTimes, targetTime.getTime());
         }
         //출발지 정류장이 만약 CITYSTATION_STATIONS에만 있다면 : 명지대역버스만 지나가는 정류장
-        else if(Arrays.asList(CITY_STATIONS).contains(start)){
+        else if(Search.hasStation(start, CITY_STATIONS)){
             startTimes = Search.BinarySearch(targetTime.getTime(), CITY_TIMETABLE);
             arrivalTime = compareArrivalTime(start, startTimes, targetTime.getTime());
             Log.d("노선", "CITY");
@@ -113,7 +117,19 @@ public class BusActivity3 extends AppCompatActivity {
         //남은시간: 도착예정 시간 + (-타겟 시간)
         time_txt.setText(DateFormat.compare(arrivalTime.getTime(), targetTime.getTime()) + "분");
 
+
+        // 지도 코드
+        MapView mapView = new MapView(this);
+        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.mapView);
+
+        MapMarkerManager markerManager = new MapMarkerManager(mapView);
+        markerManager.setMarkers(true, true);
+        Double[] startPosition = markerManager.getPosition(start);
+        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(startPosition[0], startPosition[1]), 1,true);
+
+        mapViewContainer.addView(mapView);
     }
+
     //시간표 통합 메서드
     //두 시간표를 통합하여 시간별로 sort후, 반환한다.
     public String[] integrateTimeTable(){
