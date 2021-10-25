@@ -80,9 +80,9 @@ public class BusActivity3 extends AppCompatActivity {
 
         //타겟시간에 대한 가까운 셔틀 버스찾기 : 1차 알고리즘 작성 (메서드 분리 이전, 기능 별 항목 구현)
         //MJUSTATION과 CITYSTATION 모두 포함한다면: 두 버스 모두 지나가는 정류장 (이 때 시간을 정렬해서 새로운 시간표를 만든다)
-        if(Search.hasStation(start, MJUSTATION_STATIONS) && Search.hasStation(start, CITY_STATIONS)) {
+        if(Search.hasTarget(start, MJUSTATION_STATIONS) && Search.hasTarget(start, CITY_STATIONS)) {
             String [] SORTED_INTEGRATED_TIMETABLE = integrateTimeTable();
-            startTimes = Search.BinarySearch(targetTime.getTime(), SORTED_INTEGRATED_TIMETABLE);
+            startTimes = Search.FindClosestBus(targetTime.getTime(), SORTED_INTEGRATED_TIMETABLE);
             Log.d("노선", "MJ,CITY");
             //2차 알고리즘 작성: 가까운 셔틀 버스 출발 시간을 이욯하여, start 정류장에 도착할 시간 구하기
             //input: 타겟 시간, 버스 출발 시간(직전 버스, 이후 버스), 정류장, TIME_REQUIRE 배열
@@ -92,15 +92,15 @@ public class BusActivity3 extends AppCompatActivity {
 
             arrivalTime = compareArrivalTime(start, startTimes, targetTime.getTime());
         }
-        //출발지 정류장이 만약 CITYSTATION_STATIONS에만 있다면 : 명지대역버스만 지나가는 정류장
-        else if(Search.hasStation(start, CITY_STATIONS)){
-            startTimes = Search.BinarySearch(targetTime.getTime(), CITY_TIMETABLE);
+        //출발지 정류장이 만약 CITYSTATION_STATIONS에만 있다면 : 시내버스만 지나가는 정류장
+        else if(Search.hasTarget(start, CITY_STATIONS)){
+            startTimes = Search.FindClosestBus(targetTime.getTime(), CITY_TIMETABLE);
             arrivalTime = compareArrivalTime(start, startTimes, targetTime.getTime());
             Log.d("노선", "CITY");
         }
-        //출발지 정류장이 만약 MJSTATION_STATIONS에만 있다면: 시내버스만 지나가는 정류장
+        //출발지 정류장이 만약 MJSTATION_STATIONS에만 있다면: 명지대역버스만 지나가는 정류장
         else{
-            startTimes = Search.BinarySearch(targetTime.getTime(), MJUSTATION_TIMETABLE);
+            startTimes = Search.FindClosestBus(targetTime.getTime(), MJUSTATION_TIMETABLE);
             arrivalTime = compareArrivalTime(start, startTimes, targetTime.getTime());
             Log.d("노선", "MJ");
         }
@@ -169,8 +169,8 @@ public class BusActivity3 extends AppCompatActivity {
         DateFormat arrivalTime = new DateFormat(startTime);
 
         int stationIndex = 0;
-        //버스가 명지대역 버스라면
-        if(Arrays.asList(MJUSTATION_TIMETABLE).contains(startTime)){
+        //버스가 명지대역 버스라면 : 이진 탐색
+        if(Search.hasTarget(startTime, MJUSTATION_TIMETABLE)){
             for (int i = 0; i < MJUSTATION_STATIONS.length; i++) {
                 if (MJUSTATION_STATIONS[i].equals(startStation)) {
                     stationIndex = i;
