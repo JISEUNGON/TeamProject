@@ -1,12 +1,17 @@
 package com.example.busapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -19,8 +24,12 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class BusActivity3 extends AppCompatActivity {
@@ -136,15 +145,15 @@ public class BusActivity3 extends AppCompatActivity {
          * AVD(에뮬레이터)에서는 동작하지 않으니,
          * 만약에 에뮬레이터 실행이 필요한 경우 해당 코드를 주석처리해주시기 바랍니다.
          */
-        MapView mapView = new MapView(this);
-        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.mapView);
-
-        MapMarkerManager markerManager = new MapMarkerManager(mapView);
-        markerManager.setMarkers(true, true);
-        Double[] startPosition = markerManager.getPosition(start);
-        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(startPosition[0], startPosition[1]), 1,true);
-        mapViewContainer.addView(mapView);
-        // 지도 코드 끝
+//        MapView mapView = new MapView(this);
+//        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.mapView);
+//
+//        MapMarkerManager markerManager = new MapMarkerManager(mapView);
+//        markerManager.setMarkers(true, true);
+//        Double[] startPosition = markerManager.getPosition(start);
+//        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(startPosition[0], startPosition[1]), 1,true);
+//        mapViewContainer.addView(mapView);
+//        // 지도 코드 끝
     }
 
     //시간표 통합 메서드
@@ -214,6 +223,36 @@ public class BusActivity3 extends AppCompatActivity {
             arrivalTime = bus2ArrivalTime;
         }
         return arrivalTime;
+    }
+
+    public void setAlarm(View view) {
+        //AlarmReceiver에 값 전달
+        Intent receiverIntent = new Intent(BusActivity3.this, BusAlarmManager.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(BusActivity3.this, 0, receiverIntent, 0);
+
+        //날짜 포맷을 바꿔주는 소스코드
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");;
+
+        Calendar targetAlarmTime = Calendar.getInstance();
+        targetAlarmTime.setTime(new Date());
+        targetAlarmTime.add(Calendar.MINUTE, (arrivalTime.getTotalMin() - targetTime.getTotalMin()) - 5);
+        Log.d("D/알림 설정 : ", dateFormat.format(targetAlarmTime.getTime()));
+
+        Date datetime = null;
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                datetime = dateFormat.parse(dateFormat.format(targetAlarmTime.getTime()));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(datetime);
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+
     }
 
     // KEY 발급을 위한...

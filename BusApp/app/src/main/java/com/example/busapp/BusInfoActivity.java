@@ -45,7 +45,6 @@ public class BusInfoActivity extends AppCompatActivity implements AdapterView.On
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        Log.d("[Executed!]", ".");
        if (i == 0) {
            // 명지대역
            mapMarkerManager.setMarkers(false, true);
