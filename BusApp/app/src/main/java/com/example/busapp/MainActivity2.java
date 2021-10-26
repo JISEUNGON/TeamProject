@@ -75,15 +75,20 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         // 도착지 값 저장
         aririval_str = sp2.getSelectedItem().toString();
 
-        // intent에 데이터를 저장합니다.
-        Intent intent = new Intent(this, BusActivity3.class);
-        intent.putExtra("hour", hour_str);
-        intent.putExtra("min", min_str);
-        intent.putExtra("start", start_str);
-        intent.putExtra("arrival", aririval_str);
+        if(start_str.equals("정류장")){
 
-        // 화면 전환합니다
-        startActivity(intent);
+        }
+        else {
+            // intent에 데이터를 저장합니다.
+            Intent intent = new Intent(this, BusActivity3.class);
+            intent.putExtra("hour", hour_str);
+            intent.putExtra("min", min_str);
+            intent.putExtra("start", start_str);
+            intent.putExtra("arrival", aririval_str);
+
+            // 화면 전환합니다
+            startActivity(intent);
+        }
     }
 
     public void showBusInfo(View v) {

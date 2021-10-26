@@ -188,7 +188,7 @@ public class BusActivity3 extends AppCompatActivity {
                     stationIndex = i;
                 }
             }
-            for(int i =0; i<stationIndex; i++){
+            for(int i =0; i<=stationIndex; i++){
                 arrivalTime.addTime(Integer.parseInt(CITY_TIMEREQUIRE[i]));
             }
         }
