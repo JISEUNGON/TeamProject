@@ -4,26 +4,24 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
+
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapView;
+import com.naver.maps.map.MapView;
+import com.naver.maps.map.CameraAnimation;
+import com.naver.maps.map.CameraUpdate;
+import com.naver.maps.map.NaverMap;
+import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.UiSettings;
 
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
-import java.security.MessageDigest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,7 +30,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class BusActivity3 extends AppCompatActivity {
+public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallback {
 
     // 변수들
 
@@ -43,8 +41,7 @@ public class BusActivity3 extends AppCompatActivity {
     TextView arrival_txt;
     TextView time_txt;
 
-    // 데이터 들
-    XMLParser parser = null;
+    BusManager busManager;
     String [] MJUSTATION_TIMETABLE;
     String [] MJUSTATION_TIMEREQUIRE;
     String [] MJUSTATION_STATIONS;
@@ -65,17 +62,15 @@ public class BusActivity3 extends AppCompatActivity {
         setContentView(R.layout.activity_bus3);
 
         //데이터 설정
-        try {
-            parser = new XMLParser(getResources().openRawResource(R.raw.businfo));
-            MJUSTATION_STATIONS = parser.getElementByName("BUS_MJUSTATION_STATIONS");
-            MJUSTATION_TIMEREQUIRE = parser.getElementByName("BUS_MJUSTATION_TIMEREQUIRE");
-            MJUSTATION_TIMETABLE = parser.getElementByName("BUS_MJUSTATION_TIMETABLE");
-            CITY_STATIONS = parser.getElementByName("BUS_CITY_STATIONS");
-            CITY_TIMEREQUIRE = parser.getElementByName("BUS_CITY_TIMEREQUIRE");
-            CITY_TIMETABLE = parser.getElementByName("BUS_CITY_TIMETABLE");
-        } catch (XmlPullParserException | IOException e) {
-            e.printStackTrace();
-        }
+        busManager = new BusManager(getResources().openRawResource(R.raw.businfo));
+
+        MJUSTATION_STATIONS = busManager.BUS_MJUSTATION_STATIONS();
+        MJUSTATION_TIMEREQUIRE = busManager.BUS_MJUSTATION_TIMEREQUIRE();
+        MJUSTATION_TIMETABLE = busManager.BUS_MJUSTATION_TIMETABLE();
+        CITY_STATIONS = busManager.BUS_CITY_STATIONS();
+        CITY_TIMEREQUIRE = busManager.BUS_CITY_TIMEREQUIRE();
+        CITY_TIMETABLE = busManager.BUS_CITY_TIMETABLE();
+
         Intent intent = getIntent();
         
         hour = intent.getStringExtra("hour");
@@ -131,41 +126,21 @@ public class BusActivity3 extends AppCompatActivity {
         //남은시간: 도착예정 시간 + (-타겟 시간)
         time_txt.setText(DateFormat.compare(arrivalTime.getTime(), targetTime.getTime()) + "분");
 
-
-        /**
-         * 지도를 사용하기 위한 HashKey 발급 함수입니다.
-         * getAppKeyHash();
-         * 실행 시, Log에 HashKey가 발행될텐데, 이 값을 황규도에게 알려주세요
-         * 제가 등록해야 실행이 될겁니다.
-         */
-         // getAppKeyHash();
-
-        /**
-         * 지도 코드 시작 부분입니다.
-         * AVD(에뮬레이터)에서는 동작하지 않으니,
-         * 만약에 에뮬레이터 실행이 필요한 경우 해당 코드를 주석처리해주시기 바랍니다.
-         */
-//        MapView mapView = new MapView(this);
-//        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.mapView);
-//
-//        MapMarkerManager markerManager = new MapMarkerManager(mapView);
-//        markerManager.setMarkers(true, true);
-//        Double[] startPosition = markerManager.getPosition(start);
-//        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(startPosition[0], startPosition[1]), 1,true);
-//        mapViewContainer.addView(mapView);
-//        // 지도 코드 끝
+        MapView mapView = findViewById(R.id.map_view);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
     }
 
     //시간표 통합 메서드
-    //두 시간표를 통합하여 시간별로 sort후, 반환한다.
+    //두 시간표를 통합하여 시간별로 sort후, 반환한다.s
     public String[] integrateTimeTable(){
         List<String> list1 = new ArrayList<>(Arrays.asList(MJUSTATION_TIMETABLE));
         List<String> list2 = new ArrayList<>(Arrays.asList(CITY_TIMETABLE));
         list1.addAll(list2);
         //시내버스, 명지대역 통합 버스 시간표
         String [] integrateTime = list1.toArray(new String[0]);
-        //정렬
-        String [] sortedIntegrateTime = QuickSort.sort(integrateTime);
+
+        String [] sortedIntegrateTime = QuickSort.sort(integrateTime, DateFormat::compare);
 
         return sortedIntegrateTime;
     }
@@ -255,22 +230,26 @@ public class BusActivity3 extends AppCompatActivity {
 
     }
 
-    // KEY 발급을 위한...
-    private void getAppKeyHash() {
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md;
-                md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                String something = new String(Base64.encode(md.digest(), 0));
-                Log.e("Hash key", something);
-            }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            Log.e("name not found", e.toString());
+    // 지도 코드
+    @Override
+    public void onMapReady(@NonNull NaverMap naverMap) {
+        UiSettings uiSettings = naverMap.getUiSettings();
+        uiSettings.setLocationButtonEnabled(true);
+
+
+        MapMarkerManager mapMarkerManager = new MapMarkerManager(naverMap);
+        MapPolyManager mapPolyManager = new MapPolyManager(naverMap);
+        if(Search.hasTarget(start, MJUSTATION_STATIONS)) {
+            mapMarkerManager.setMarkers(false, true);
+            mapPolyManager.setPolyLine(false, true);
+        } else {
+            mapMarkerManager.setMarkers(true, false);
+            mapPolyManager.setPolyLine(true, false);
         }
+        CameraUpdate cameraUpdate = CameraUpdate.scrollAndZoomTo(
+                mapMarkerManager.getPosition(start),15)
+                .animate(CameraAnimation.Fly, 3000);
+        naverMap.moveCamera(cameraUpdate);
+
     }
-
-
 }

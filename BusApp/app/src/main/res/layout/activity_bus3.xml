@@ -128,8 +128,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/name_logo" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/mapView"
+    <com.naver.maps.map.MapView
+        android:id="@+id/map_view"
         android:layout_width="407dp"
         android:layout_height="253dp"
         app:layout_constraintBottom_toTopOf="@+id/imageView4"

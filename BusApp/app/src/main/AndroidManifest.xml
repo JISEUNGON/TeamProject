@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BusApp">
-        <meta-data android:name="com.kakao.sdk.AppKey" android:value="30c15de4acff919a1b2d7d67ee1d2a62"/>
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="p4xiv96tkc" />
         <activity
             android:name=".BusActivity3"
             android:exported="true" />
