@@ -1,5 +1,9 @@
 package com.example.busapp;
 
+import android.util.Log;
+
+import java.util.Arrays;
+
 public class Search {
     /**
      * time이 주어지면, timeTable에서 값을 검색합니다.
@@ -60,18 +64,18 @@ public class Search {
      *               false: 정류장이 없는 경우
      */
     public static boolean hasTarget(String target, String[] table) {
+        String[] sortedTable = QuickSort.sort(table, String::compareTo);
         int low = 0;
         int high = table.length - 1;
         int mid;
 
         while (low <= high) {
             mid = (low + high) / 2;
-
-            if (target.equals(table[mid])){
+            if (target.equals(sortedTable[mid])){
                 return true;
             }else{
                 //검색 대상값이 비교대상과 비교하여 -인 경우 (사전순으로 앞에있는 경우)
-                if (target.compareTo(table[mid]) < 0) {
+                if (target.compareTo(sortedTable[mid]) < 0) {
                     high = mid -1;
                 }
                 //검색 대상값이 비교대상과 비교하여 +인 경우 (사전순으로 뒤에 있는경우)
