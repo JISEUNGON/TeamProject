@@ -3,9 +3,10 @@ package com.example.busapp;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 
-public class DateFormat {
+public class DateFormat implements Compare{
 
     int totalMin;
     String timeFormat;
@@ -60,6 +61,13 @@ public class DateFormat {
         DateFormat srcTime = new DateFormat(src);
         DateFormat destTime = new DateFormat(target);
 
+        return srcTime.getTotalMin() - destTime.getTotalMin();
+    }
+
+    @Override
+    public int compareTo(String src, String dest) {
+        DateFormat srcTime = new DateFormat(src);
+        DateFormat destTime = new DateFormat(dest);
         return srcTime.getTotalMin() - destTime.getTotalMin();
     }
 }

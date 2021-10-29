@@ -1,24 +1,31 @@
 package com.example.busapp;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.lang.reflect.Field;
 import java.util.Calendar;
 
 public class MainActivity2 extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePicker.OnTimeChangedListener{
 
     //////////////변수들//////////////
     // 타임피커
-    TimePicker timepicker;
+    TimePicker timePicker;
     Calendar calendar;
 
     // 스피너
@@ -49,16 +56,20 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         sp2.setOnItemSelectedListener(this);
 
         // 타임피커 설정
-        timepicker = findViewById(R.id.timepicker);
+        timePicker = findViewById(R.id.timepicker);
         // 초기 시간, 분 설정
-        timepicker.setCurrentHour(12);
-        timepicker.setCurrentMinute(55);
-
-
+        timePicker.setCurrentHour(12);
+        timePicker.setCurrentMinute(55);
 
         // canlendar설정
         calendar = Calendar.getInstance();
 
+    }
+
+    private void setNumberPickerTextColor(View spinner, int color) {
+        int mNumberPickerInputId = Resources.getSystem().getIdentifier("numberpicker_input", "id", "android");
+        TextView input = (TextView) spinner.findViewById(mNumberPickerInputId);
+        input.setTextColor(color);
     }
 
     // 버스찾기 버튼 누른후
@@ -67,9 +78,9 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         // 문자열에 시간, 출발지, 도착지를 저장합니다.
 
         // 시간 저장
-        hour_str = timepicker.getCurrentHour().toString();
+        hour_str = timePicker.getCurrentHour().toString();
         // 분저장
-        min_str = timepicker.getCurrentMinute().toString();
+        min_str = timePicker.getCurrentMinute().toString();
         // 출발지 값 저장
         start_str = sp1.getSelectedItem().toString();
         // 도착지 값 저장
@@ -123,8 +134,9 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int min = calendar.get(Calendar.MINUTE);
 
-        timepicker.setCurrentHour(hour);
-        timepicker.setCurrentMinute(min);
+        timePicker.setCurrentHour(hour);
+        timePicker.setCurrentMinute(min);
 
     }
+
 }

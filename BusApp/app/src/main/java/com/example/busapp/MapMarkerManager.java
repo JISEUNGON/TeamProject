@@ -1,11 +1,13 @@
 package com.example.busapp;
 
-import net.daum.mf.map.api.MapPOIItem;
-import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapView;
+import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.MapView;
+import com.naver.maps.map.NaverMap;
+import com.naver.maps.map.overlay.Marker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.stream.Stream;
 
 /**
@@ -14,7 +16,8 @@ import java.util.stream.Stream;
  */
 public class MapMarkerManager {
     private HashMap<String, Double[]> stationInfo;
-    private MapView mapView;
+    private NaverMap naverMap;
+    private ArrayList<Marker> markerArrayList;
     private final String[] stations = new String[]{"명지대", "상공회의소", "진입로", "명지대역", "진입로(명지대방향)", "이마트", "명진당", "제3공학관", "동부경찰서", "용인시장", "중앙공영주차장", "제1공학관"};
     private final Double[][] positions = new Double[][]{
             new Double[]{37.22426266116359 , 127.18708882379035},
@@ -31,10 +34,12 @@ public class MapMarkerManager {
             new Double[]{37.22271140883418, 127.18678412115244},
     };
 
-    public MapMarkerManager(MapView mapView) {
+    public MapMarkerManager(NaverMap naverMap) {
+        this.markerArrayList = new ArrayList<>();
+        this.naverMap = naverMap;
+
         stationInfo = new HashMap<>();
         for(int i=0; i<stations.length; i++) stationInfo.put(stations[i], positions[i]);
-        this.mapView = mapView;
     }
 
     /**
@@ -43,7 +48,8 @@ public class MapMarkerManager {
      * @param station 명지대역 노선의 정류장을 Mark
      */
     public void setMarkers(boolean city, boolean station) {
-        mapView.removeAllPOIItems();
+        for(Marker marker: markerArrayList) marker.setMap(null);
+        markerArrayList = new ArrayList<>();
 
         String[] targetStations = new String[0];
         if (city && station) {
@@ -55,15 +61,13 @@ public class MapMarkerManager {
         } else {
             return;
         }
-        for (String cur_station: targetStations){
-            MapPOIItem marker = new MapPOIItem();
-            Double[] position = stationInfo.get(cur_station);
-            marker.setMapPoint(MapPoint.mapPointWithGeoCoord(position[0], position[1]));
-            marker.setItemName(cur_station);
-            marker.setMarkerType(MapPOIItem.MarkerType.BluePin); // 기본으로 제공하는 BluePin 마커 모양.
-            marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin); // 마커를 클릭했을때, 기본으로 제공하는 RedPin 마커 모양.
-            mapView.addPOIItem(marker);
-
+        for(String _station: targetStations) {
+            Marker marker = new Marker();
+            Double[] position = stationInfo.get(_station);
+            marker.setPosition(new LatLng(position[0], position[1]));
+            marker.setCaptionText(_station);
+            marker.setMap(naverMap);
+            markerArrayList.add(marker);
         }
     }
 
@@ -72,7 +76,8 @@ public class MapMarkerManager {
      * @param station 찾으려는 정류장
      * @return (위도, 경도)
      */
-    public Double[] getPosition(String station) {
-        return stationInfo.get(station);
+    public LatLng getPosition(String station) {
+        Double[] pos = stationInfo.get(station);
+        return new LatLng(pos[0], pos[1]);
     }
 }
