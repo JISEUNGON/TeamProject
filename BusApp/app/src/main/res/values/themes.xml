@@ -15,10 +15,12 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-<!--        <item name="android:textColorPrimary">@color/white</item>-->
+        <item name="android:textColorPrimary">@color/white</item>
         <!-- Customize your theme here. -->
     </style>
-
+    <style name="custom_spinner">
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
     <style name="time_picker">
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textSize">20sp</item>

@@ -8,6 +8,11 @@ public class QuickSort {
         return x;
     }
 
+    public static String[] sort(String[] x) {
+        quickSort(0, x.length - 1, x, String::compareTo);
+        return x;
+    }
+
     private static void quickSort(int low, int high, String[] x, Compare method) {
         if (low < high) {
             int s = partition(low, high, x, method);

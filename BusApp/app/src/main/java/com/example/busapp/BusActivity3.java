@@ -72,7 +72,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         CITY_TIMETABLE = busManager.BUS_CITY_TIMETABLE();
 
         Intent intent = getIntent();
-        
+
         hour = intent.getStringExtra("hour");
         min = intent.getStringExtra("min");
         if(Integer.parseInt(min)<10){
@@ -108,7 +108,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             arrivalTime = compareArrivalTime(start, startTimes, targetTime.getTime());
             Log.d("노선", "MJ");
         }
-        
+
         //테스트 데이터 출력
         Log.d("타겟시간", targetTime.getTime());
         Log.d("내가 탈 정류장", start);

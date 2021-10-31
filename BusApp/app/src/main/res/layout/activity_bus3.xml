@@ -119,21 +119,14 @@
         app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="117dp"
-        android:layout_height="43dp"
-        android:contentDescription="@string/main_logo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/name_logo" />
-
     <com.naver.maps.map.MapView
         android:id="@+id/map_view"
         android:layout_width="407dp"
         android:layout_height="253dp"
         app:layout_constraintBottom_toTopOf="@+id/imageView4"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" >
+
+    </com.naver.maps.map.MapView>
 
     <ImageButton
         android:id="@+id/imageButton4"
@@ -144,5 +137,14 @@
         android:onClick="setAlarm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
+        app:srcCompat="@android:drawable/ic_lock_idle_alarm"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo02" />
 </androidx.constraintlayout.widget.ConstraintLayout>
