@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.naver.maps.map.MapView;
@@ -58,22 +59,23 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
     //입력받은 시간
     DateFormat targetTime;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bus3);
 
-//        int SDK_INT = android.os.Build.VERSION.SDK_INT;
-//        if (SDK_INT > 8)
-//        {
-//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-//                    .permitAll().build();
-//            StrictMode.setThreadPolicy(policy);
-//            //your codes her
-//
-//        }
-//        String min = CityBusManager.getClosestCityBus();
-//        Log.d("W", min);
+        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+        if (SDK_INT > 8)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            //your codes her
+
+        }
+
+        int minBus = CityBusManager.getClosestCityBus();
 
         //데이터 설정
         busManager = new BusManager(getResources().openRawResource(R.raw.businfo));
