@@ -110,7 +110,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         // 글씨 흰색으로 변경
-        ((TextView)parent.getChildAt(0)).setTextColor(Color.WHITE);
+    //    ((TextView)parent.getChildAt(0)).setTextColor(Color.WHITE);
     }
 
 
