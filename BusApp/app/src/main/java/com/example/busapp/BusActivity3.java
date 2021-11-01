@@ -1,8 +1,10 @@
 package com.example.busapp;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.os.Build;
@@ -33,14 +35,13 @@ import java.util.List;
 public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallback {
 
     // 변수들
-
     String hour, min;
     String start,arrival;
     // 출발지
     TextView start_txt;
     TextView arrival_txt;
     TextView time_txt;
-
+    
     BusManager busManager;
     String [] MJUSTATION_TIMETABLE;
     String [] MJUSTATION_TIMEREQUIRE;
@@ -123,8 +124,27 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         arrival_txt.setText(arrival);
 
         time_txt = findViewById(R.id.textView10);
+
         //남은시간: 도착예정 시간 + (-타겟 시간)
-        time_txt.setText(DateFormat.compare(arrivalTime.getTime(), targetTime.getTime()) + "분");
+        int timeLeft = DateFormat.compare(arrivalTime.getTime(), targetTime.getTime());
+
+        //끝값 처리: 오늘 버스 모두 끝났을 때
+        if(timeLeft<=0){
+            AlertDialog.Builder myAlBuilder=
+                    new AlertDialog.Builder(BusActivity3.this);
+            myAlBuilder.setMessage("금일 버스가 모두 운행 종료되었습니다.");
+            myAlBuilder.setPositiveButton("이전으로", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
+                    startActivity(intent);
+                }
+            });
+            myAlBuilder.show();
+        }
+        else{
+            time_txt.setText(DateFormat.compare(arrivalTime.getTime(), targetTime.getTime()) + "분");
+        }
 
         MapView mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
