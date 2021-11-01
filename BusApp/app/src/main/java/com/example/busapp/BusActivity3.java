@@ -9,6 +9,7 @@ import android.content.Intent;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -61,6 +62,18 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bus3);
+
+//        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+//        if (SDK_INT > 8)
+//        {
+//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+//                    .permitAll().build();
+//            StrictMode.setThreadPolicy(policy);
+//            //your codes her
+//
+//        }
+//        String min = CityBusManager.getClosestCityBus();
+//        Log.d("W", min);
 
         //데이터 설정
         busManager = new BusManager(getResources().openRawResource(R.raw.businfo));
