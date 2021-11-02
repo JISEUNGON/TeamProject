@@ -1,7 +1,9 @@
 package com.example.busapp;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -17,6 +19,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
@@ -136,6 +140,17 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
 
         timePicker.setCurrentHour(hour);
         timePicker.setCurrentMinute(min);
+
+    }
+
+    // 추후 현재 위치 버튼으로 연동할 부분
+    public void setCurrLocation(View v) {
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if(permissionCheck == PackageManager.PERMISSION_DENIED){ //포그라운드 위치 권한 확인
+            //위치 권한 요청
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        }
 
     }
 

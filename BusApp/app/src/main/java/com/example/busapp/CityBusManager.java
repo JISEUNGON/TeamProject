@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class CityBusManager {
     private static final String endPoint = "http://apis.data.go.kr/6410000/busarrivalservice/getBusArrivalList";
-    private static final String sericeKey = "ZJF99uIbDjNnsZBlrbDg%2BDL%2FCyHI2Vc%2BATgI41upeL1%2FGf2jjy8keoY%2FEb6E6CLtokViU7v8bN8tRY0vJ2x3EQ%3D%3D";
+    private static final String serviceKey = "ZJF99uIbDjNnsZBlrbDg%2BDL%2FCyHI2Vc%2BATgI41upeL1%2FGf2jjy8keoY%2FEb6E6CLtokViU7v8bN8tRY0vJ2x3EQ%3D%3D";
     private static final String stationID = "228002023";
 
     /**
@@ -38,7 +38,7 @@ public class CityBusManager {
         Integer[] result = null;
 
         try {
-            String apiUrl = endPoint + "?serviceKey=" + sericeKey + "&stationId=" + stationID;
+            String apiUrl = endPoint + "?serviceKey=" + serviceKey + "&stationId=" + stationID;
 
             // Open the connection
             URL url = new URL(apiUrl);
