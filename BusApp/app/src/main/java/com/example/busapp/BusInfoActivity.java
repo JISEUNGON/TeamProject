@@ -22,6 +22,7 @@ import com.naver.maps.map.UiSettings;
 public class BusInfoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, OnMapReadyCallback {
     private MapView mapView;
     private MapMarkerManager mapMarkerManager;
+    private NaverMap naverMap;
     private MapPolyManager mapPolyManager;
 
     @Override
@@ -43,15 +44,24 @@ public class BusInfoActivity extends AppCompatActivity implements AdapterView.On
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        CameraUpdate cameraUpdate = null;
         switch(i) {
             case 0: return;
-            case 1:
+            case 1: // 명지대역
                 mapMarkerManager.setMarkers(false, true);
                 mapPolyManager.setPolyLine(false, true);
+                cameraUpdate = CameraUpdate.scrollAndZoomTo(
+                        new LatLng(37.23253332906188, 127.18883568451659),13)
+                        .animate(CameraAnimation.Fly, 3000);
+                naverMap.moveCamera(cameraUpdate);
                 break;
-            case 2:
+            case 2: // 시내
                 mapMarkerManager.setMarkers(true, false);
                 mapPolyManager.setPolyLine(true, false);
+                cameraUpdate = CameraUpdate.scrollAndZoomTo(
+                        new LatLng(37.23031233626919, 127.1941142719217),13)
+                        .animate(CameraAnimation.Fly, 3000);
+                naverMap.moveCamera(cameraUpdate);
                 break;
             default:
         }
@@ -66,6 +76,7 @@ public class BusInfoActivity extends AppCompatActivity implements AdapterView.On
 
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
+        this.naverMap = naverMap;
         mapMarkerManager = new MapMarkerManager(naverMap);
         mapPolyManager = new MapPolyManager(naverMap);
 
