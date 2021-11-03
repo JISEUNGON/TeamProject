@@ -6,6 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Comparator;
 
+/**
+ * 
+ * TODO 
+ *   1. CityBusManager 통합
+ *   2. 현 클래스에서 빨강버스, 셔틀버스를 모두 계산하는 클래스로
+ */
 public class BusManager {
     private String[] MJUSTATION_STATIONS;
     private String[] MJUSTATION_TIMEREQUIRE;

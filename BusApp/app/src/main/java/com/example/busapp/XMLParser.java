@@ -9,6 +9,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+/**
+ * TODO
+ *      1. 더 Generic한 Parser
+ *      2. parser.getNextText() 활용
+ */
 public class XMLParser {
     private XmlPullParser parser;
     private InputStream xmlStream;
