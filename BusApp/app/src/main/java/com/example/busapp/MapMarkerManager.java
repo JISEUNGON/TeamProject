@@ -15,31 +15,38 @@ import java.util.stream.Stream;
  * 정류장과 그 위치(위도, 경도)는 하드 코딩 되어 있으며, 정류장 변화시 애플리케이션 업데이트를 통하여 변경합니다.
  */
 public class MapMarkerManager {
-    private HashMap<String, Double[]> stationInfo;
+    private final HashMap<String, Double[]> stationInfo = new HashMap<String, Double[]>() {{
+            put("명지대",
+                    new Double[]{37.22426266116359, 127.18708882379035});
+            put("상공회의소",
+                    new Double[]{37.23067699999998, 127.18828089999997});
+            put("진입로",
+                    new Double[]{37.23399210000001,  127.18882909999999});
+            put("명지대역",
+                    new Double[]{37.238513300000015, 127.18960559999998});
+            put("진입로(명지대방향)",
+                    new Double[]{37.233999900000015, 127.18861349999999});
+            put("이마트",
+                    new Double[]{37.23036920601031 , 127.18799722805205});
+            put("명진당",
+                    new Double[]{37.22218358841614, 127.18895343450612});
+            put("제3공학관",
+                    new Double[]{37.219509212602546, 127.1829915220452});
+            put("동부경찰서",
+                    new Double[]{37.23475516860965 , 127.19817660622552});
+            put("용인시장",
+                    new  Double[]{37.235430174474516, 127.20667763142193});
+            put("중앙공영주차장",
+                    new Double[]{37.23391585619981 , 127.20892718244508});
+            put("제1공학관",
+                    new Double[]{37.22271140883418, 127.18678412115244});
+    }};
     private NaverMap naverMap;
     private ArrayList<Marker> markerArrayList;
-    private final String[] stations = new String[]{"명지대", "상공회의소", "진입로", "명지대역", "진입로(명지대방향)", "이마트", "명진당", "제3공학관", "동부경찰서", "용인시장", "중앙공영주차장", "제1공학관"};
-    private final Double[][] positions = new Double[][]{
-            new Double[]{37.22426266116359 , 127.18708882379035},
-            new Double[]{37.23057289820615 , 127.18817054455151},
-            new Double[]{37.233972549267705, 127.18874893910944},
-            new Double[]{37.238375611745454, 127.18972811341291},
-            new Double[]{37.234053441164306, 127.18866744576944},
-            new Double[]{37.23036920601031 , 127.18799722805205},
-            new Double[]{37.22218358841614, 127.18895343450612},
-            new Double[]{37.219509212602546, 127.1829915220452},
-            new Double[]{37.23475516860965 , 127.19817660622552},
-            new Double[]{37.235430174474516, 127.20667763142193},
-            new Double[]{37.23391585619981 , 127.20892718244508},
-            new Double[]{37.22271140883418, 127.18678412115244},
-    };
 
     public MapMarkerManager(NaverMap naverMap) {
         this.markerArrayList = new ArrayList<>();
         this.naverMap = naverMap;
-
-        stationInfo = new HashMap<>();
-        for(int i=0; i<stations.length; i++) stationInfo.put(stations[i], positions[i]);
     }
 
     /**
@@ -52,9 +59,7 @@ public class MapMarkerManager {
         markerArrayList = new ArrayList<>();
 
         String[] targetStations = new String[0];
-        if (city && station) {
-            targetStations = stations;
-        } else if(city && !station) {
+        if(city && !station) {
             targetStations = new String[]{"명지대", "상공회의소", "진입로", "진입로(명지대방향)", "이마트", "동부경찰서", "용인시장", "중앙공영주차장", "제1공학관", "제3공학관"};
         } else if (!city && station) {
             targetStations = new String[]{"명지대", "상공회의소", "진입로", "명지대역", "진입로(명지대방향)", "이마트", "명진당", "제3공학관"};

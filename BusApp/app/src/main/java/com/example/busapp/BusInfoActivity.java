@@ -51,7 +51,7 @@ public class BusInfoActivity extends AppCompatActivity implements AdapterView.On
                 mapMarkerManager.setMarkers(false, true);
                 mapPolyManager.setPolyLine(false, true);
                 cameraUpdate = CameraUpdate.scrollAndZoomTo(
-                        new LatLng(37.23253332906188, 127.18883568451659),13)
+                        new LatLng(37.2311084, 127.18953090000002),13)
                         .animate(CameraAnimation.Fly, 3000);
                 naverMap.moveCamera(cameraUpdate);
                 break;
