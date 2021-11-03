@@ -75,6 +75,11 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
 
         }
 
+        /**
+         * =======================================================
+         *               ^__^ 시 내 버 스 연 동 코 드 ^__^
+         * =======================================================
+         */
         int minBus = CityBusManager.getClosestCityBus();
 
         //데이터 설정
