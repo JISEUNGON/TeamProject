@@ -6,16 +6,11 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-/**
- * TODO
- *      1. 더 Generic한 Parser
- *      2. parser.getNextText() 활용
- */
+
 public class XMLParser {
     private XmlPullParser parser;
     private InputStream xmlStream;
@@ -30,40 +25,13 @@ public class XMLParser {
         xmlStream = stream;
     }
 
+
     /**
      * XML 속성(name) 기반으로 탐색합니다.
      * @param name XML 속성 값
-     * @return 속성 값이 XML 파일에 없는 경우 NULL
-     *         String[] 값들
-     * @throws IOException Stream Error
-     * @throws XmlPullParserException
+     * @param recursive true --> name 하위 태그에 대한 값도 파싱 합니다.
+     * @return 파싱한 값
      */
-    public String[] getElementByName(String name) throws IOException, XmlPullParserException {
-        if(xmlStream.markSupported()) xmlStream.reset(); // stream mark를 0으로
-        parser.setInput(new InputStreamReader(xmlStream)); // parser가 stream을 읽도록
-
-        ArrayList<String> items = new ArrayList<>(); // item이 들어갈 String
-        int event = parser.getEventType();
-        boolean tagOpened = false; // name을 속성 값으로 가지는 TAG가 열렸는지
-        while(event != XmlPullParser.END_DOCUMENT) {
-            switch (event) {
-                case XmlPullParser.START_TAG: // <xml>
-                    String tag = parser.getAttributeValue(null, "name");
-                    if (tag != null && tag.equals(name)) tagOpened = true;
-                    break;
-                case XmlPullParser.END_TAG: // </xml>
-                    tag = parser.getName();
-                    if (tag != null && tag.equals("string-array") && tagOpened) return items.toArray(new String[0]);
-                    break;
-                case XmlPullParser.TEXT: // else
-                    if (tagOpened && parser.getText().replaceAll("\\W", "").length() > 0) items.add(parser.getText());
-                    break;
-            }
-            event = parser.next();
-        }
-        return null;
-    }
-
     public String[] getElementByName(String name, boolean recursive) {
         try{
             if(xmlStream.markSupported()) xmlStream.reset();
