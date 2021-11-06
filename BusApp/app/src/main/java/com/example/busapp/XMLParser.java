@@ -1,5 +1,7 @@
 package com.example.busapp;
 
+import android.util.Log;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -37,7 +39,7 @@ public class XMLParser {
      * @throws XmlPullParserException
      */
     public String[] getElementByName(String name) throws IOException, XmlPullParserException {
-        xmlStream.reset(); // stream mark를 0으로
+        if(xmlStream.markSupported()) xmlStream.reset(); // stream mark를 0으로
         parser.setInput(new InputStreamReader(xmlStream)); // parser가 stream을 읽도록
 
         ArrayList<String> items = new ArrayList<>(); // item이 들어갈 String
@@ -61,4 +63,61 @@ public class XMLParser {
         }
         return null;
     }
+
+    public String[] getElementByName(String name, boolean recursive) {
+        try{
+            if(xmlStream.markSupported()) xmlStream.reset();
+            parser.setInput(new InputStreamReader(xmlStream));
+            if(!recursive) {
+                ArrayList<String> result = new ArrayList<>();
+                while(parser.getEventType() != XmlPullParser.END_DOCUMENT) {
+                    if(parser.getEventType() == XmlPullParser.START_TAG) {
+                        if(name.equals(parser.getName())) {
+                            result.add(parser.nextText());
+                        }
+                    }
+                    parser.next();
+                }
+                return result.toArray(new String[0]);
+            } else {
+                ArrayList<String> items = new ArrayList<>();
+
+                boolean tagStarted = false; // 탐색 태그 오픈되었는지 확인
+                String tag = null; // 탐색된 태그의 이름 <string-arrray>의 경우 string-array
+                while(parser.getEventType() != XmlPullParser.END_DOCUMENT) {
+                    // START_TAG 와 END_TAG 에 대해서만 동작
+                    if(parser.getEventType() != XmlPullParser.START_TAG && parser.getEventType() != XmlPullParser.END_TAG) {
+                        parser.next(); continue;
+                    }
+
+                    String current_tag = null;
+                    String current_tagName = null;
+                    if(parser.getEventType() == XmlPullParser.START_TAG) {
+                        current_tagName = parser.getAttributeValue(null, "name");
+                        current_tag = parser.getName();
+                    } else {
+                        current_tagName = current_tag = parser.getName();
+                    }
+                    if (current_tagName == null) { // TAG의 name 속성이 없는 경우
+                        if(tagStarted) { // 이미 TAG를 찾았을 수도 있음 (Recursive)
+                            String text = parser.nextText();
+                            items.add(text);
+                        }
+                    } else { // Tag의 name 속성이 있는 경우
+                        if (current_tagName.equals(name) || (tag != null && current_tag.equals(tag))) {
+                            tag = current_tag;
+                            if(tagStarted) return items.toArray(new String[0]);
+                            else tagStarted = true;
+                        }
+                    }
+                    parser.next();
+                }
+                return items.toArray(new String[0]);
+            }
+        } catch (Exception e) {
+            Log.e("[getElementByName]", e.toString());
+        }
+        return null;
+    }
+
 }
