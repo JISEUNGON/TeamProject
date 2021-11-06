@@ -134,11 +134,22 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
 
         /**
          * =======================================================
-         *               ^__^ 시 내 버 스 연 동 코 드 ^__^
+         *           ^__^ (진입로) 시 내 버 스 연 동 코 드 ^__^
          * =======================================================
          */
         int minCityBus = BusManager.getClosestCityBus();
 
+        /**
+         * =======================================================
+         *           ^__^ NaverMap API 연동 코드 ^__^
+         * =======================================================
+         */
+        // 명지대역
+        // Integer[] roadInfo = BusManager.getStationRouteInfo();
+
+        // 시내
+        Integer[] roadInfo = BusManager.getCityRouteInfo();
+        Log.d("NAVERAPI_RESULT", Arrays.toString(roadInfo));
         //남은시간: 도착예정 시간 + (-타겟 시간)
         int timeLeft = DateFormat.compare(arrivalTime.getTime(), targetTime.getTime());
 
