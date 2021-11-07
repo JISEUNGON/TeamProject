@@ -75,8 +75,6 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
 
         }
 
-        int minBus = CityBusManager.getClosestCityBus();
-
         //데이터 설정
         busManager = new BusManager(getResources().openRawResource(R.raw.businfo));
 
@@ -125,12 +123,6 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             Log.d("노선", "MJ");
         }
 
-        //테스트 데이터 출력
-        Log.d("타겟시간", targetTime.getTime());
-        Log.d("내가 탈 정류장", start);
-        Log.d("출발시간", Arrays.toString(startTimes));
-        Log.d("도착시간", arrivalTime.getTime());
-
         //데이터 적용
         start_txt = findViewById(R.id.textView6);
         start_txt.setText(start);
@@ -140,8 +132,37 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
 
         time_txt = findViewById(R.id.textView10);
 
+        /**
+         * =======================================================
+         *           ^__^ (진입로) 시 내 버 스 연 동 코 드 ^__^
+         * =======================================================
+         */
+        int minCityBus = BusManager.getClosestCityBus();
+
+        /**
+         * =======================================================
+         *           ^__^ NaverMap API 연동 코드 ^__^
+         * =======================================================
+         */
+        // 명지대역
+        // Integer[] roadInfo = BusManager.getStationRouteInfo();
+
+        // 시내
+        Integer[] roadInfo = BusManager.getCityRouteInfo();
+        Log.d("NAVERAPI_RESULT", Arrays.toString(roadInfo));
         //남은시간: 도착예정 시간 + (-타겟 시간)
         int timeLeft = DateFormat.compare(arrivalTime.getTime(), targetTime.getTime());
+
+        // timeLeft: 가장 가까운 셔틀버스
+        // minCityBus: 가장 가까운 빨간버스
+        // 따라서, 해당 2개의 값 중 작은 값이 다음에 올 가장 작은 버스임
+        timeLeft = Math.min(minCityBus, timeLeft);
+
+        //테스트 데이터 출력
+        Log.d("타겟시간", targetTime.getTime());
+        Log.d("내가 탈 정류장", start);
+        Log.d("출발시간", Arrays.toString(startTimes));
+        Log.d("도착시간", arrivalTime.getTime());
 
         //끝값 처리: 오늘 버스 모두 끝났을 때
         if(timeLeft<=0){

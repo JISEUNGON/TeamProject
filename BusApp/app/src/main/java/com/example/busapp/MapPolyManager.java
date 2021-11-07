@@ -1,12 +1,9 @@
 package com.example.busapp;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.NaverMap;
-import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.overlay.PathOverlay;
 
 import java.util.LinkedList;
@@ -23,29 +20,44 @@ public class MapPolyManager {
 
         stationPath = new LinkedList<>();
 
-        // 1. 버스 정류소 ~ 진입로 정류장
+        // 1. 버스 정류소 ~ 상공 회의소
         stationPath.add(new LatLng(37.22426266116359, 127.18708882379035));
         stationPath.add(new LatLng(37.22425400771773, 127.18729647503024));
-        stationPath.add(new LatLng(37.22467677145656, 127.18777649304232));
-        stationPath.add(new LatLng(37.22545086696076, 127.18799710738335));
-        stationPath.add(new LatLng(37.22758220293855, 127.1875234825655));
+        stationPath.add(new LatLng(37.22471270000002, 127.1879012));
+        stationPath.add(new LatLng(37.22546689999999, 127.18810780000003));
+        stationPath.add(new LatLng(37.22714370000001, 127.18769519999998));
+        stationPath.add(new LatLng(37.22896940000001, 127.18793339999999));
+        stationPath.add(new LatLng(37.23067699999998, 127.18828089999997));
 
-        // 2. 진입로 정류장 ~ 명지대역
-        stationPath.add(new LatLng(37.236137583028516, 127.1891371746645));
+        // 2. 상공 회의소 ~ 명지대 진입로 정류장
+        stationPath.add(new LatLng(37.23399210000001,  127.18882909999999));
 
-        // 3. 명지대역 ~ 진입로 정류장
-        stationPath.add(new LatLng(37.238304750869176, 127.18989874207213));
-        stationPath.add(new LatLng(37.23869504860537, 127.18611569245844));
-        stationPath.add(new LatLng(37.23694096024548, 127.18511268142272));
-        stationPath.add(new LatLng(37.236137583028516, 127.1891371746645));
+        // 3. 진입로 정류장 ~ 명지대역
+        stationPath.add(new LatLng(37.23474450000002, 127.188946));
+        stationPath.add(new LatLng(37.235082300000016, 127.18898490000005));
+        stationPath.add(new LatLng(37.23588290000001, 127.18918769999998));
+        stationPath.add(new LatLng(37.23837380000001, 127.18997559999994));
+        stationPath.add(new LatLng(37.238513300000015, 127.18960559999998));
 
-        // 4. 진입로 정류장 ~ 명지대 입구
-        stationPath.add(new LatLng(37.22758220293855, 127.1875234825655));
-        stationPath.add(new LatLng(37.22545086696076, 127.18799710738335));
-        stationPath.add(new LatLng(37.22467677145656, 127.18777649304232));
+        // 4. 명지대역 ~ 진입로 정류장
+        stationPath.add(new LatLng(37.238609700000005, 127.1888485));
+        stationPath.add(new LatLng(37.23881399999999, 127.18613739999998));
+        stationPath.add(new LatLng(37.23687370000001, 127.1850938));
+        stationPath.add(new LatLng(37.236056800000014, 127.18909959999999));
+        stationPath.add(new LatLng(37.2352001, 127.18881200000001));
+        stationPath.add(new LatLng(37.23396799999999, 127.18863040000002));
+
+        // 4. 진입로 정류장 ~ 이마트?
+        stationPath.add(new LatLng(37.232280100000004, 127.18837540000003));
+        stationPath.add(new LatLng(37.23036920601031 , 127.18799722805205));
+        stationPath.add(new LatLng(37.22764440000002, 127.18748700000002));
 
         // 5. 명지대 입구 ~ 명진당 ~ 제3공학관
-        stationPath.add(new LatLng(37.22325681570014, 127.18803207785596));
+        stationPath.add(new LatLng(37.22712330000002, 127.18750610000004));
+        stationPath.add(new LatLng(37.22557719999999, 127.18792940000002));
+        stationPath.add(new LatLng(37.22479979999998, 127.18771650000002));
+        stationPath.add(new LatLng(37.22324490000001, 127.18810420000001));
+
         stationPath.add(new LatLng(37.222018782706456, 127.18908653666968));
         stationPath.add(new LatLng(37.22116685707866, 127.18749330322773));
         stationPath.add(new LatLng(37.221081051089584, 127.18684677373614));
@@ -57,15 +69,20 @@ public class MapPolyManager {
 
         cityPath = new LinkedList<>();
 
-        // 1. 버스 정류소 ~ 진입로 정류장
         cityPath.add(new LatLng(37.22426266116359, 127.18708882379035));
         cityPath.add(new LatLng(37.22425400771773, 127.18729647503024));
-        cityPath.add(new LatLng(37.22467677145656, 127.18777649304232));
-        cityPath.add(new LatLng(37.22545086696076, 127.1879971073833));
-        cityPath.add(new LatLng(37.22758220293855, 127.1875234825655));
-        cityPath.add(new LatLng(37.236137583028516, 127.1891371746645));
+        cityPath.add(new LatLng(37.22471270000002, 127.1879012));
+        cityPath.add(new LatLng(37.22546689999999, 127.18810780000003));
+        cityPath.add(new LatLng(37.22714370000001, 127.18769519999998));
+        cityPath.add(new LatLng(37.22896940000001, 127.18793339999999));
+        cityPath.add(new LatLng(37.23067699999998, 127.18828089999997));
+
+        // 2. 상공 회의소 ~ 명지대 진입로 정류장
+        cityPath.add(new LatLng(37.23399210000001,  127.18882909999999));
 
         // 2. 진입로 정류장 ~ 동부경찰서
+        cityPath.add(new LatLng(37.235088999999995, 127.1889761));
+        cityPath.add(new LatLng(37.23599719999999, 127.189232));
         cityPath.add(new LatLng(37.2347648570182, 127.19544604515174));
         cityPath.add(new LatLng(37.234835353601895, 127.19885071960425));
 
@@ -77,11 +94,19 @@ public class MapPolyManager {
         // 4. 용인시장 ~ 중앙공영주차장 앞
         cityPath.add(new LatLng(37.23322070497441, 127.2090417528162));
 
-        // 5. 중앙공영 주차장 앞 ~ 명지대 사거리
-        cityPath.add(new LatLng(37.23288608117436, 127.20430544744865));
-        cityPath.add(new LatLng(37.232933080076286, 127.19959286096265));
-        cityPath.add(new LatLng(37.23474251550567, 127.19546073918873));
-        cityPath.add(new LatLng(37.23612893664601, 127.18914449591065));
+        // 5. 중앙공영 주차장 앞 ~ 명지대 진입로
+        cityPath.add(new LatLng(37.23325700000001, 127.2089643));
+        cityPath.add(new LatLng(37.23300330000001, 127.20429910000001));
+        cityPath.add(new LatLng(37.23300879999999, 127.19993819999998));
+        cityPath.add(new LatLng(37.2350996, 127.19473199999999));
+        cityPath.add(new LatLng(37.2362121, 127.18915839999994));
+        cityPath.add(new LatLng(37.23521510000001, 127.18885570000008));
+        cityPath.add(new LatLng(37.233999900000015, 127.18861349999999));
+
+        // 4. 진입로 정류장 ~ 이마트?
+        cityPath.add(new LatLng(37.232280100000004, 127.18837540000003));
+        cityPath.add(new LatLng(37.23036920601031 , 127.18799722805205));
+        cityPath.add(new LatLng(37.22764440000002, 127.18748700000002));
 
         // 6. 명지대 사거리 ~ 학교 앞
         cityPath.add(new LatLng(37.22758220293855, 127.1875234825655));
@@ -107,7 +132,7 @@ public class MapPolyManager {
         } else {
             path.setCoords(stationPath);
         }
-        path.setWidth(20);
+        path.setWidth(15);
         path.setColor(Color.GREEN);
         path.setMap(naverMap);
     }
