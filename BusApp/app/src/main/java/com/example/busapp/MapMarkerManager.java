@@ -111,4 +111,8 @@ public class MapMarkerManager {
 
         return info;
     }
+
+    public static HashMap<String, Double[]> getStationInfo() {
+        return stationInfo;
+    }
 }
