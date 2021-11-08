@@ -5,58 +5,106 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="117dp"
-        android:layout_height="43dp"
-        android:contentDescription="@string/main_logo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/name_logo" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/mju01"
-        android:orientation="vertical"
-        tools:context=".MainActivity2"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="-16dp">
-
-        <Spinner
-            android:id="@+id/busSpinner"
-            android:theme="@style/custom_spinner"
-            android:layout_width="318dp"
-            android:layout_height="44dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="96dp"
-            android:dropDownWidth="wrap_content"
-            android:entries="@array/list03"
-            android:minHeight="48dp"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.6"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+        android:gravity="bottom"
+        app:umanoPanelHeight="110dp"
+        app:umanoScrollableView="@id/bus_scroll_view"
+        app:umanoShadowHeight="4dp"
+        tools:layout_editor_absoluteX="37dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <com.naver.maps.map.MapView
             android:id="@+id/bus_map_view"
-            android:layout_width="404dp"
-            android:layout_height="555dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginStart="4dp"
             android:layout_marginTop="168dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"></com.naver.maps.map.MapView>
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/logo02" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/gray">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <Spinner
+                    android:id="@+id/busSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/busCat"
+                    android:minHeight="48dp"
+                    android:spinnerMode="dropdown"
+                    android:theme="@style/custom_spinner"
+                    android:visibility="visible"
+                    tools:visibility="visible" />
+
+                <Spinner
+                    android:id="@+id/weekendSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/weekend"
+                    android:minHeight="48dp"
+                    android:spinnerMode="dropdown"
+                    android:theme="@style/custom_spinner"
+                    android:visibility="visible"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:gravity="center|top"
+                android:text="V 버스 시간표 V"
+                android:textSize="16sp" />
+
+            <ScrollView
+                android:id="@+id/bus_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TableLayout
+                    android:id="@+id/bus_timeTable"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:stretchColumns="*"
+                    android:orientation="horizontal">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="출발 시간"
+                            android:textSize="24sp"></TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="도착 예정 시간"
+                            android:textSize="24sp"></TextView>
+
+                    </TableRow>
+                </TableLayout>
+            </ScrollView>
+
+        </LinearLayout>
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
