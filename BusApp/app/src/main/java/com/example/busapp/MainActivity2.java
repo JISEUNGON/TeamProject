@@ -2,11 +2,17 @@ package com.example.busapp;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,13 +23,17 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 public class MainActivity2 extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePicker.OnTimeChangedListener{
 
@@ -37,7 +47,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
     Spinner sp2;
 
     // 도착지, 출발지, 시간
-    String start_str,aririval_str, hour_str, min_str;
+    String start_str, arrival_str, hour_str, min_str;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +98,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         // 출발지 값 저장
         start_str = sp1.getSelectedItem().toString();
         // 도착지 값 저장
-        aririval_str = sp2.getSelectedItem().toString();
+        arrival_str = sp2.getSelectedItem().toString();
 
         if(start_str.equals("정류장")){
 
@@ -99,7 +109,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
             intent.putExtra("hour", hour_str);
             intent.putExtra("min", min_str);
             intent.putExtra("start", start_str);
-            intent.putExtra("arrival", aririval_str);
+            intent.putExtra("arrival", arrival_str);
 
             // 화면 전환합니다
             startActivity(intent);
@@ -152,6 +162,25 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
 
+        try {
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            sp1.setSelection(getIndex(Search.FindClosestStation(location)), true);
+//            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, location1 -> sp1.setSelection(getIndex(Search.FindClosestStation(location1)), true));
+//            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, location1 -> sp1.setSelection(getIndex(Search.FindClosestStation(location1)), true));
+
+        } catch (Exception e) {
+            Log.d("setCurrLocation", e.getMessage());
+        }
+    }
+
+    private int getIndex(String station) {
+        String[] stations = getResources().getStringArray(R.array.list01);
+        for(int i=0; i<stations.length; i++)
+            if(station.equals(stations[i])) return i;
+        return -1;
     }
 
 }

@@ -145,10 +145,10 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
          * =======================================================
          */
         // 명지대역
-        // Integer[] roadInfo = BusManager.getStationRouteInfo();
+        Integer[] roadInfo = BusManager.getStationRouteInfo();
 
         // 시내
-        Integer[] roadInfo = BusManager.getCityRouteInfo();
+//        Integer[] roadInfo = BusManager.getCityRouteInfo();
         Log.d("NAVERAPI_RESULT", Arrays.toString(roadInfo));
         //남은시간: 도착예정 시간 + (-타겟 시간)
         int timeLeft = DateFormat.compare(arrivalTime.getTime(), targetTime.getTime());

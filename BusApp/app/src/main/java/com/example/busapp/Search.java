@@ -1,8 +1,10 @@
 package com.example.busapp;
 
+import android.location.Location;
 import android.util.Log;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Search {
     /**
@@ -86,5 +88,33 @@ public class Search {
         }
         //찾지 못했다면
         return false;
+    }
+
+    public static String FindClosestStation(Location location) {
+        HashMap<String, Double[]> stationInfo = MapMarkerManager.getStationInfo();
+        String[] stations = stationInfo.keySet().toArray(new String[0]);
+        Double[] currentLocation = new Double[]{location.getLatitude(), location.getLongitude()};
+
+//        Log.d("CurrentLocation : ", currentLocation[0] + " / " + currentLocation[1]);
+        String closestStation = null;
+        Double[] closestLocation = null;
+        for(String station: stations) {
+//            Log.d("SEARCHING...", station);
+            if(closestLocation == null && closestStation == null) {
+                closestStation = station;
+                closestLocation = stationInfo.get(station);
+            } else {
+                Double[] stationLocation = stationInfo.get(station);
+                if(Math.sqrt(Math.pow(Math.abs(currentLocation[0] - closestLocation[0]), 2) + Math.pow(Math.abs(currentLocation[1] - closestLocation[1]), 2)) >
+                   Math.sqrt(Math.pow(Math.abs(currentLocation[0] - stationLocation[0]), 2) + Math.pow(Math.abs(currentLocation[1] - stationLocation[1]), 2))) {
+//                    Log.d("NEW STATION : ", station);
+                    closestStation = station;
+                    closestLocation = stationLocation;
+                }
+            }
+        }
+
+        Log.d("정류장 이름 : ", closestStation);
+        return closestStation;
     }
 }
