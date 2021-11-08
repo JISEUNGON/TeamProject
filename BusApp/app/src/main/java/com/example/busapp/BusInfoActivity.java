@@ -62,6 +62,7 @@ public class BusInfoActivity extends AppCompatActivity implements AdapterView.On
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 weekendSpinner_position = position;
+                createBusTimeTable();
             }
 
             @Override
@@ -74,7 +75,7 @@ public class BusInfoActivity extends AppCompatActivity implements AdapterView.On
 
     private void createBusTimeTable() {
         TableLayout tableLayout = (TableLayout) findViewById(R.id.bus_timeTable);
-
+        tableLayout.removeAllViews();
         /**
          * 승언님 여기서 작성하시면 될 것 같습니다.  부탁드려요
          * https://1d1cblog.tistory.com/140
@@ -89,7 +90,7 @@ public class BusInfoActivity extends AppCompatActivity implements AdapterView.On
          *      1: 공휴일
          */
 
-        for(int j=0; j < 5; j++) {
+        for(int j=0; j < busSpinner_position * 10; j++) {
             TableRow tableRow = new TableRow(this);
             tableRow.setLayoutParams(new TableRow.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -128,7 +129,7 @@ public class BusInfoActivity extends AppCompatActivity implements AdapterView.On
                 break;
             default:
         }
-
+        createBusTimeTable();
     }
 
     @Override
