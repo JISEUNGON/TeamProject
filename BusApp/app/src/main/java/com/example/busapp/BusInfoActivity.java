@@ -19,10 +19,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraUpdate;
+import com.naver.maps.map.LocationSource;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
+import com.naver.maps.map.util.FusedLocationSource;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class BusInfoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, OnMapReadyCallback {
@@ -43,7 +45,6 @@ public class BusInfoActivity extends AppCompatActivity implements AdapterView.On
 
         mapView = findViewById(R.id.bus_map_view);
         mapView.getMapAsync(this);
-
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         slidingUpPanelLayout.setAnchorPoint(0.4f);
@@ -156,5 +157,6 @@ public class BusInfoActivity extends AppCompatActivity implements AdapterView.On
                 new LatLng(37.233972549267705, 127.18874893910944),15)
                 .animate(CameraAnimation.Fly, 3000);
         naverMap.moveCamera(cameraUpdate);
+        naverMap.setLocationSource(new FusedLocationSource(this, 1000));
     }
 }

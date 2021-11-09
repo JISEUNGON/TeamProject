@@ -24,6 +24,9 @@ import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
+import com.naver.maps.map.util.FusedLocationSource;
+import com.naver.maps.map.widget.LocationButtonView;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 
 import java.text.ParseException;
@@ -64,7 +67,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bus3);
-
+//        ((SlidingUpPanelLayout) findViewById(R.id.bus_sliding_layout)).setAnchorPoint(0.4f);
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 8)
         {
@@ -289,10 +292,6 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
     // 지도 코드
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
-        UiSettings uiSettings = naverMap.getUiSettings();
-        uiSettings.setLocationButtonEnabled(true);
-
-
         MapMarkerManager mapMarkerManager = new MapMarkerManager(naverMap);
         MapPolyManager mapPolyManager = new MapPolyManager(naverMap);
         if(Search.hasTarget(start, MJUSTATION_STATIONS)) {
@@ -306,6 +305,13 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
                 mapMarkerManager.getPosition(start),15)
                 .animate(CameraAnimation.Fly, 3000);
         naverMap.moveCamera(cameraUpdate);
+        naverMap.setLocationSource(new FusedLocationSource(this, 1000));
+
+        // UI 재배치
+        UiSettings uiSettings = naverMap.getUiSettings();
+        uiSettings.setLocationButtonEnabled(false);
+        LocationButtonView locationButtonView = findViewById(R.id.naverMap_location);
+        locationButtonView.setMap(naverMap);
 
     }
 }
