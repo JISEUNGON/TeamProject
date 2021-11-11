@@ -42,6 +42,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
     // 변수들
     String hour, min;
     String start,arrival;
+    String bus;
     // 출발지
     TextView start_txt;
     TextView arrival_txt;

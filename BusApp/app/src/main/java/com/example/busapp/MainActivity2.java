@@ -3,6 +3,7 @@ package com.example.busapp;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -24,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.app.AlertDialog;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +50,8 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
 
     // 도착지, 출발지, 시간
     String start_str, arrival_str, hour_str, min_str;
+    // 버스 종류
+    String bus_str;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +104,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         // 도착지 값 저장
         arrival_str = sp2.getSelectedItem().toString();
 
+        // 정류장을 선택했을 경우입니다.
         if(start_str.equals("정류장")){
 
         }
@@ -111,8 +116,65 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
             intent.putExtra("start", start_str);
             intent.putExtra("arrival", arrival_str);
 
-            // 화면 전환합니다
-            startActivity(intent);
+            // 진입로를 선택했을 경우입니다.
+            // 대화상자가 보여집니다.
+            if(start_str.equals("진입로")){
+
+                // 버스 목록입니다.
+                String[] buss_list = new String[] {"시내버스", "셔틀버스"};
+
+                // 다이얼로그 생성
+                AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity2.this);
+                // 제복부분
+                dlg.setTitle("버스를 선택해 주세요");
+
+                // 라디오버튼 부분
+                dlg.setSingleChoiceItems(buss_list, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //button1.setText(buss_list[which]);
+                        
+                        // 어느 버스 선택했는지 확인합니다.
+                        if(buss_list[which] == "시내버스"){
+                            bus_str = "시내버스";
+                            //Toast.makeText(MainActivity2.this, "시내버스", Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            bus_str = "셔틀버스";
+                            //Toast.makeText(MainActivity2.this, "셔틀버스", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+                // 확인버튼 누른 경우입니다.
+                dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        // intent에 데이터를 저장합니다.
+                        intent.putExtra("bus", bus_str);
+
+                        // 화면 전환합니다
+                        startActivity(intent);
+                    }
+                });
+
+                // 취소버튼을 누른 경우입니다.
+                dlg.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+
+
+                dlg.show();
+            }
+            else{
+                // 화면 전환합니다
+                startActivity(intent);
+            }
         }
     }
 
