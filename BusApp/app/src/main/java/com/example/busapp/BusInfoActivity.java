@@ -2,6 +2,7 @@ package com.example.busapp;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,9 @@ import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import java.io.InputStream;
+import java.util.Arrays;
 
 public class BusInfoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, OnMapReadyCallback {
     private MapView mapView;
@@ -90,21 +94,52 @@ public class BusInfoActivity extends AppCompatActivity implements AdapterView.On
          *      0: 평일
          *      1: 공휴일
          */
-
-        for(int j=0; j < busSpinner_position * 10; j++) {
-            TableRow tableRow = new TableRow(this);
-            tableRow.setLayoutParams(new TableRow.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            ));
-            for(int i=0; i<2; i++) {
-                TextView textView = new TextView(this);
-                textView.setText("HELLO WORLD");
-                textView.setGravity(Gravity.CENTER);
-                tableRow.addView(textView);
+        try {
+            XMLParser parser = new XMLParser(getResources().openRawResource(R.raw.businfo));
+            String[] timeTable = null;
+            if(busSpinner_position >= 1 && weekendSpinner_position >= 0) {
+                if(busSpinner_position == 1 && weekendSpinner_position == 0) {
+                    // 명지대역, 평일
+                    timeTable = parser.getElementByName("BUS_MJUSTATION_TIMETABLE", true);
+                } else if(busSpinner_position == 1 && weekendSpinner_position == 1) {
+                    // 명지대역, 공휴일
+                    timeTable = null;
+                } else if(busSpinner_position == 2 && weekendSpinner_position == 0) {
+                    // 시내, 평일
+                    timeTable = parser.getElementByName("BUS_CITY_TIMETABLE", true);
+                } else if(busSpinner_position == 2 && weekendSpinner_position == 1) {
+                    // 시내, 공휴일
+                    timeTable = parser.getElementByName("BUS_CITY_TIMETABLE_WEEKEND", true);
+                }
             }
-            tableLayout.addView(tableRow);
+            if(timeTable == null) return;
+            for(String time: timeTable) {
+                TableRow tableRow = new TableRow(this);
+                tableRow.setLayoutParams(new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                ));
+
+                for(int i=0; i<2; i++) {
+                    TextView textView = new TextView(this);
+                    if(i == 0) {
+                        textView.setText(time);
+                    } else {
+                        DateFormat dateFormat = new DateFormat(time);
+                        dateFormat.addTime(25);
+                        textView.setText(dateFormat.getTime());
+                    }
+
+                    textView.setGravity(Gravity.CENTER);
+                    tableRow.addView(textView);
+                }
+                tableLayout.addView(tableRow);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
