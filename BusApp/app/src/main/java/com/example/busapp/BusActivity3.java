@@ -13,6 +13,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -89,7 +90,12 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         CITY_TIMEREQUIRE = busManager.BUS_CITY_TIMEREQUIRE();
         CITY_TIMETABLE = busManager.BUS_CITY_TIMETABLE();
 
+        // 데이터를 저장합니다.
         Intent intent = getIntent();
+
+        // 버스정류장 저장
+        bus = intent.getStringExtra("bus");
+        //Toast.makeText(BusActivity3.this, bus, Toast.LENGTH_LONG).show();
 
         hour = intent.getStringExtra("hour");
         min = intent.getStringExtra("min");

@@ -82,6 +82,9 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         // canlendar설정
         calendar = Calendar.getInstance();
 
+        // 시작할때 시내버스 값을 저장합니다.
+        bus_str = "시내버스";
+
     }
 
     private void setNumberPickerTextColor(View spinner, int color) {
@@ -121,7 +124,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
             if(start_str.equals("진입로")){
 
                 // 버스 목록입니다.
-                String[] buss_list = new String[] {"시내버스", "셔틀버스"};
+                String[] buss_list = new String[] {"시내버스", "셔틀버스", "셔틀버스,시내버스 통합"};
 
                 // 다이얼로그 생성
                 AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity2.this);
@@ -133,15 +136,18 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //button1.setText(buss_list[which]);
-                        
+
                         // 어느 버스 선택했는지 확인합니다.
                         if(buss_list[which] == "시내버스"){
                             bus_str = "시내버스";
                             //Toast.makeText(MainActivity2.this, "시내버스", Toast.LENGTH_LONG).show();
                         }
-                        else{
+                        else if(buss_list[which] == "셔틀버스"){
                             bus_str = "셔틀버스";
                             //Toast.makeText(MainActivity2.this, "셔틀버스", Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            bus_str = "통합";
                         }
                     }
                 });
