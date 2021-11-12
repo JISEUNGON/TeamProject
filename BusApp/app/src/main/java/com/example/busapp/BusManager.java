@@ -103,7 +103,8 @@ public class BusManager {
             if (time < min) min = time;
         }
 
-        return min;
+        if (min == 9999) return null;
+        else return min;
     }
 
     /**
