@@ -14,6 +14,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import android.app.AlertDialog;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -94,6 +96,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
     }
 
     // 버스찾기 버튼 누른후
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void SearchBus(View v){
 
         // 문자열에 시간, 출발지, 도착지를 저장합니다.
@@ -154,12 +157,11 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
 
                 // 확인버튼 누른 경우입니다.
                 dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
                         // intent에 데이터를 저장합니다.
                         intent.putExtra("bus", bus_str);
-
                         // 화면 전환합니다
                         startActivity(intent);
                     }
@@ -184,9 +186,6 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         }
     }
 
-    public void showBusInfo(View v) {
-        startActivity(new Intent(this, BusInfoActivity.class));
-    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
