@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
@@ -39,14 +41,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-class BackGroudTask extends AsyncTask{
-
+class ProcessHandler extends Handler {
     @Override
-    protected Object doInBackground(Object[] objects) {
-        return null;
+    public void handleMessage(@NonNull Message msg) {
+        super.handleMessage(msg);
     }
 }
-
 public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallback {
 
     // 변수들
@@ -91,7 +91,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         MapView mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
-
+        Log.d("남은 정류장 : ", Arrays.toString(getIntent().getStringArrayExtra("restStation")));
 
         //데이터 설정
         busManager = new BusManager(getResources().openRawResource(R.raw.businfo));
@@ -168,8 +168,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
          * =======================================================
          */
         // 명지대역
-        int[] roadInfo = Arrays.stream(intent.getStringExtra("station").split(",")).mapToInt(Integer::parseInt).toArray();
-//        int[] roadInfo = BusManager.getStationRouteInfo();
+        int[] roadInfo = BusManager.getStationRouteInfo();
 //        int[] roadInfo = new int[]{1,2,3,4,5,6};
         // 시내
 //        Integer[] roadInfo = BusManager.getCityRouteInfo();

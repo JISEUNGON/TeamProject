@@ -112,7 +112,15 @@ public class MapMarkerManager {
         return info;
     }
 
-    public static HashMap<String, Double[]> getStationInfo() {
+    public static String[] getStationInfo() {
+        return new String[]{"명지대", "상공회의소", "진입로", "명지대역", "진입로(명지대방향)", "이마트", "명진당", "제3공학관"};
+    }
+
+    public static String[] getCityInfo() {
+        return new String[]{"명지대", "상공회의소", "진입로", "동부경찰서", "용인시장", "중앙공영주차장", "진입로(명지대방향)", "이마트", "제1공학관", "제3공학관"};
+    }
+
+    public static HashMap<String, Double[]> getAllStationInfo() {
         return stationInfo;
     }
 }

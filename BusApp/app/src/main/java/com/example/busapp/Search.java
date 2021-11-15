@@ -91,7 +91,7 @@ public class Search {
     }
 
     public static String FindClosestStation(Location location) {
-        HashMap<String, Double[]> stationInfo = MapMarkerManager.getStationInfo();
+        HashMap<String, Double[]> stationInfo = MapMarkerManager.getAllStationInfo();
         String[] stations = stationInfo.keySet().toArray(new String[0]);
         Double[] currentLocation = new Double[]{location.getLatitude(), location.getLongitude()};
 

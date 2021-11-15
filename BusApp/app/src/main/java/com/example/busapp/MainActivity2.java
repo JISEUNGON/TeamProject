@@ -35,6 +35,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -113,8 +114,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         // 정류장을 선택했을 경우입니다.
         if(start_str.equals("정류장")){
 
-        }
-        else {
+        } else {
             // intent에 데이터를 저장합니다.
             Intent intent = new Intent(this, BusActivity3.class);
             intent.putExtra("hour", hour_str);
@@ -162,6 +162,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // intent에 데이터를 저장합니다.
                         intent.putExtra("bus", bus_str);
+                        intent.putExtra("restStation", new String[] {"이마트"});
                         // 화면 전환합니다
                         startActivity(intent);
                     }
@@ -175,12 +176,27 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
                     }
                 });
 
-
-
                 dlg.show();
             }
             else{
                 // 화면 전환합니다
+                String[] restStation = null; // 앞으로의 정류장
+                String[] stationInfo = MapMarkerManager.getStationInfo(); // 전체 정류장
+                for(int i=0; i< stationInfo.length; i++) {
+                    if(stationInfo[i].equals(start_str)) {
+                        restStation = Arrays.copyOfRange(stationInfo, i + 1, stationInfo.length - 2);
+                    }
+                }
+                if(restStation == null) {
+                    stationInfo = MapMarkerManager.getCityInfo();
+                    for(int i=0; i<stationInfo.length; i++) {
+                        if(stationInfo[i].equals(start_str)) {
+                            restStation = Arrays.copyOfRange(stationInfo, i+ 1, stationInfo.length - 2);
+                        }
+                    }
+                }
+
+                intent.putExtra("restStation", restStation);
                 startActivity(intent);
             }
         }
