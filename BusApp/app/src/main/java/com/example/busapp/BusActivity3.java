@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -38,6 +39,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+class BackGroudTask extends AsyncTask{
+
+    @Override
+    protected Object doInBackground(Object[] objects) {
+        return null;
+    }
+}
+
 public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallback {
 
     // 변수들
@@ -48,7 +57,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
     TextView start_txt;
     TextView arrival_txt;
     TextView time_txt;
-    
+
     BusManager busManager;
     String [] MJUSTATION_TIMETABLE;
     String [] MJUSTATION_TIMEREQUIRE;
@@ -69,7 +78,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bus3);
-//        ((SlidingUpPanelLayout) findViewById(R.id.bus_sliding_layout)).setAnchorPoint(0.4f);
+
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 8)
         {
@@ -79,6 +88,10 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             //your codes her
 
         }
+        MapView mapView = findViewById(R.id.map_view);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
+
 
         //데이터 설정
         busManager = new BusManager(getResources().openRawResource(R.raw.businfo));
@@ -147,16 +160,17 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
          *           ^__^ (진입로) 시 내 버 스 연 동 코 드 ^__^
          * =======================================================
          */
-        int minCityBus = BusManager.getClosestCityBus();
-
+//        int minCityBus = BusManager.getClosestCityBus();
+        int minCityBus = 1;
         /**
          * =======================================================
          *           ^__^ NaverMap API 연동 코드 ^__^
          * =======================================================
          */
         // 명지대역
-        Integer[] roadInfo = BusManager.getStationRouteInfo();
-
+        int[] roadInfo = Arrays.stream(intent.getStringExtra("station").split(",")).mapToInt(Integer::parseInt).toArray();
+//        int[] roadInfo = BusManager.getStationRouteInfo();
+//        int[] roadInfo = new int[]{1,2,3,4,5,6};
         // 시내
 //        Integer[] roadInfo = BusManager.getCityRouteInfo();
         Log.d("NAVERAPI_RESULT", Arrays.toString(roadInfo));
@@ -192,10 +206,9 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             time_txt.setText(DateFormat.compare(arrivalTime.getTime(), targetTime.getTime()) + "분");
         }
 
-        MapView mapView = findViewById(R.id.map_view);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+
     }
+
 
     //시간표 통합 메서드
     //두 시간표를 통합하여 시간별로 sort후, 반환한다.s
@@ -216,6 +229,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
     //도착 정류장이 어떤 TIMETABLE에 속해있는지 판단 한 후, 해당 노선도의 TIMEREQUIRE테이블을 이용해서 도착 정류장에 버스가 도착할 시간을 반환한다.
     public DateFormat getArrivalTime(String startStation, String startTime){
 
+        Log.d("TEST", startTime);
         DateFormat arrivalTime = new DateFormat(startTime);
 
         int stationIndex = 0;
