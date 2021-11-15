@@ -53,15 +53,6 @@
         <item>명진당</item>
         <item>제3공학관</item>
     </string-array>
-    <string-array name="BUS_MJUSTATION_TIMEREQUIRE">
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-    </string-array>
     <string-array name="BUS_GIHEUNG_TIMETABLE">
         <item>8:00</item>
         <item>9:00</item>
@@ -115,16 +106,4 @@
         <item>제1공학관</item>
         <item>3공학관</item>
     </string-array>
-    <string-array name="BUS_CITY_TIMEREQUIRE">
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-        <item>1</item>
-    </string-array>
 </resources>
-

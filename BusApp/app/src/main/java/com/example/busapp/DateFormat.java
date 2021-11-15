@@ -27,6 +27,13 @@ public class DateFormat implements Compare{
         totalMin = Integer.parseInt(time[0])*60 + Integer.parseInt(time[1]);
     }
 
+    public DateFormat(int totalMin){
+        this.totalMin = totalMin;
+        int hour = totalMin/60;
+        int min = totalMin - hour*60;
+        this.timeFormat = hour + ":" + min;
+    }
+
     //분 형태의 시간을 반환한다.
     public int getTotalMin() {
         return totalMin;

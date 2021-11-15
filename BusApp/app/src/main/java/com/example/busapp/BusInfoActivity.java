@@ -184,7 +184,6 @@ public class BusInfoActivity extends AppCompatActivity implements AdapterView.On
         UiSettings uiSettings = naverMap.getUiSettings();
         uiSettings.setLocationButtonEnabled(true);
 
-
         MapMarkerManager mapMarkerManager = new MapMarkerManager(naverMap);
         MapPolyManager mapPolyManager = new MapPolyManager(naverMap);
 
