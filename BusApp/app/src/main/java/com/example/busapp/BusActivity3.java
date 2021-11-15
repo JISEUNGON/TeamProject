@@ -9,6 +9,8 @@ import android.content.Intent;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +39,15 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+
+class ProcessHandler extends Handler {
+    @Override
+    public void handleMessage(@NonNull Message msg) {
+        super.handleMessage(msg);
+    }
+}
+
 
 public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -83,6 +94,12 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             //your codes her
 
         }
+
+        MapView mapView = findViewById(R.id.map_view);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
+        Log.d("남은 정류장 : ", Arrays.toString(getIntent().getStringArrayExtra("restStation")));
+
 
         //데이터 설정
         busManager = new BusManager(getResources().openRawResource(R.raw.businfo));
@@ -158,6 +175,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
          *           ^__^ NaverMap API 연동 코드 ^__^
          * =======================================================
          */
+
         Log.d("NAVERAPI_RESULT", Arrays.toString(MJUSTATION_TIMEREQUIRE));
         Log.d("NAVERAPI_RESULT", Arrays.toString(CITY_TIMEREQUIRE));
         //3차 알고리즘: 다이얼로그 값에 따라 남은 시간 설정 다르게 하기
