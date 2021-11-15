@@ -124,7 +124,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
 
             // 진입로를 선택했을 경우입니다.
             // 대화상자가 보여집니다.
-            if(start_str.equals("진입로")){
+            if(start_str.equals("진입로(명지대방향)")){
 
                 // 버스 목록입니다.
                 String[] buss_list = new String[] {"시내버스", "셔틀버스", "셔틀버스,시내버스 통합"};
@@ -191,7 +191,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         // 글씨 흰색으로 변경
-    //    ((TextView)parent.getChildAt(0)).setTextColor(Color.WHITE);
+        //    ((TextView)parent.getChildAt(0)).setTextColor(Color.WHITE);
     }
 
 
