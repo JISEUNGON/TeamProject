@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,29 +40,32 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+
 class ProcessHandler extends Handler {
     @Override
     public void handleMessage(@NonNull Message msg) {
         super.handleMessage(msg);
     }
 }
+
+
 public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallback {
 
     // 변수들
     String hour, min;
     String start,arrival;
-    String bus;
+    String busType;
     // 출발지
     TextView start_txt;
     TextView arrival_txt;
     TextView time_txt;
-
+    
     BusManager busManager;
     String [] MJUSTATION_TIMETABLE;
-    String [] MJUSTATION_TIMEREQUIRE;
+    int [] MJUSTATION_TIMEREQUIRE;
     String [] MJUSTATION_STATIONS;
     String [] CITY_TIMETABLE;
-    String [] CITY_TIMEREQUIRE;
+    int [] CITY_TIMEREQUIRE;
     String [] CITY_STATIONS;
 
     //버스 출발 시간
@@ -72,13 +74,17 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
     DateFormat arrivalTime;
     //입력받은 시간
     DateFormat targetTime;
+    //버스 도착까지 남은 시간
+    int timeLeft;
+    //가장 가까운 시내(빨간)버스
+    int minCityBus;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bus3);
-
+//        ((SlidingUpPanelLayout) findViewById(R.id.bus_sliding_layout)).setAnchorPoint(0.4f);
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 8)
         {
@@ -88,26 +94,28 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             //your codes her
 
         }
+
         MapView mapView = findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
         Log.d("남은 정류장 : ", Arrays.toString(getIntent().getStringArrayExtra("restStation")));
 
+
         //데이터 설정
         busManager = new BusManager(getResources().openRawResource(R.raw.businfo));
 
         MJUSTATION_STATIONS = busManager.BUS_MJUSTATION_STATIONS();
-        MJUSTATION_TIMEREQUIRE = busManager.BUS_MJUSTATION_TIMEREQUIRE();
+        MJUSTATION_TIMEREQUIRE = BusManager.getStationRouteInfo();
         MJUSTATION_TIMETABLE = busManager.BUS_MJUSTATION_TIMETABLE();
         CITY_STATIONS = busManager.BUS_CITY_STATIONS();
-        CITY_TIMEREQUIRE = busManager.BUS_CITY_TIMEREQUIRE();
+        CITY_TIMEREQUIRE =  BusManager.getCityRouteInfo();
         CITY_TIMETABLE = busManager.BUS_CITY_TIMETABLE();
 
         // 데이터를 저장합니다.
         Intent intent = getIntent();
 
         // 버스정류장 저장
-        bus = intent.getStringExtra("bus");
+        busType = intent.getStringExtra("bus");
         //Toast.makeText(BusActivity3.this, bus, Toast.LENGTH_LONG).show();
 
         hour = intent.getStringExtra("hour");
@@ -160,26 +168,54 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
          *           ^__^ (진입로) 시 내 버 스 연 동 코 드 ^__^
          * =======================================================
          */
-//        int minCityBus = BusManager.getClosestCityBus();
-        int minCityBus = 1;
+        int minCityBus = BusManager.getClosestCityBus();
+
         /**
          * =======================================================
          *           ^__^ NaverMap API 연동 코드 ^__^
          * =======================================================
          */
-        // 명지대역
-        int[] roadInfo = BusManager.getStationRouteInfo();
-//        int[] roadInfo = new int[]{1,2,3,4,5,6};
-        // 시내
-//        Integer[] roadInfo = BusManager.getCityRouteInfo();
-        Log.d("NAVERAPI_RESULT", Arrays.toString(roadInfo));
-        //남은시간: 도착예정 시간 + (-타겟 시간)
-        int timeLeft = DateFormat.compare(arrivalTime.getTime(), targetTime.getTime());
 
-        // timeLeft: 가장 가까운 셔틀버스
-        // minCityBus: 가장 가까운 빨간버스
-        // 따라서, 해당 2개의 값 중 작은 값이 다음에 올 가장 작은 버스임
-        timeLeft = Math.min(minCityBus, timeLeft);
+        Log.d("NAVERAPI_RESULT", Arrays.toString(MJUSTATION_TIMEREQUIRE));
+        Log.d("NAVERAPI_RESULT", Arrays.toString(CITY_TIMEREQUIRE));
+        //3차 알고리즘: 다이얼로그 값에 따라 남은 시간 설정 다르게 하기
+        //진입로가 선택됐을 때 다이얼로그 출력: 선택된 값에 따라 timeLeft값 설정
+        // timeLeft: 가장 가까운 버스가 남은 시간
+        // DateFormat.compare(arrivalTime.getTime(), targetTime.getTime()): 가장 가까운 셔틀버스 남은 시간
+        // minCityBus: 가장 가까운 빨간버스 남은 시간
+        if(busType!=null){
+            switch (busType) {
+                case "셔틀버스":
+                    Log.d("정류장체크", "진입로 :case 셔틀버스");
+                    timeLeft = DateFormat.compare(arrivalTime.getTime(), targetTime.getTime());
+                    break;
+                case "시내버스":
+                    Log.d("정류장체크", "진입로 :case 시내버스");
+                    timeLeft = minCityBus;
+                    break;
+                //null 이거나(진입로외에 다른 정류장), 셔틀버스만 일 때
+                case "통합":
+                    Log.d("정류장체크", "진입로 :case 통합");
+                    //만약 시내버스가 있다면
+                    if(minCityBus!=-1){
+                        //시내버스와 셔틀버스를 비교해서 더 빠른 것을 반환
+                        timeLeft = Math.min(minCityBus, DateFormat.compare(arrivalTime.getTime(), targetTime.getTime()));
+                    }
+                    //시내버스가 없다면
+                    else{
+                        //가장 빠른 셔틀버스를 반환
+                        timeLeft = DateFormat.compare(arrivalTime.getTime(), targetTime.getTime());
+                    }
+                    break;
+            }
+            //null로 초기화
+            busType = null;
+        }
+        //진입로를 제외한 이외의 정류장 일 때
+        else{
+            Log.d("정류장체크", "이외 정류장");
+            timeLeft = DateFormat.compare(arrivalTime.getTime(), targetTime.getTime());
+        }
 
         //테스트 데이터 출력
         Log.d("타겟시간", targetTime.getTime());
@@ -202,12 +238,10 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             myAlBuilder.show();
         }
         else{
-            time_txt.setText(DateFormat.compare(arrivalTime.getTime(), targetTime.getTime()) + "분");
+            time_txt.setText(timeLeft + "분");
         }
 
-
     }
-
 
     //시간표 통합 메서드
     //두 시간표를 통합하여 시간별로 sort후, 반환한다.s
@@ -217,7 +251,6 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         list1.addAll(list2);
         //시내버스, 명지대역 통합 버스 시간표
         String [] integrateTime = list1.toArray(new String[0]);
-
         String [] sortedIntegrateTime = QuickSort.sort(integrateTime, DateFormat::compare);
 
         return sortedIntegrateTime;
@@ -228,7 +261,6 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
     //도착 정류장이 어떤 TIMETABLE에 속해있는지 판단 한 후, 해당 노선도의 TIMEREQUIRE테이블을 이용해서 도착 정류장에 버스가 도착할 시간을 반환한다.
     public DateFormat getArrivalTime(String startStation, String startTime){
 
-        Log.d("TEST", startTime);
         DateFormat arrivalTime = new DateFormat(startTime);
 
         int stationIndex = 0;
@@ -241,7 +273,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             }
             //구해진 stationIndex까지 즉 출발점부터 start 정류장까지 걸리는 시간을 더한다.
             for(int i =0; i<=stationIndex; i++){
-                arrivalTime.addTime(Integer.parseInt(MJUSTATION_TIMEREQUIRE[i]));
+                arrivalTime.addTime(MJUSTATION_TIMEREQUIRE[i]);
             }
         }
         //버스가 시내 버스라면
@@ -252,7 +284,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
             for(int i =0; i<=stationIndex; i++){
-                arrivalTime.addTime(Integer.parseInt(CITY_TIMEREQUIRE[i]));
+                arrivalTime.addTime(CITY_TIMEREQUIRE[i]);
             }
         }
         return arrivalTime;
