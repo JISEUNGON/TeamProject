@@ -241,9 +241,9 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             time_txt.setText(timeLeft + "분");
         }
 
-        MapView mapView = findViewById(R.id.map_view);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+        //MapView mapView = findViewById(R.id.map_view);
+        //mapView.onCreate(savedInstanceState);
+        //mapView.getMapAsync(this);
     }
 
     //시간표 통합 메서드
