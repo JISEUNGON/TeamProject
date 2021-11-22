@@ -2,7 +2,7 @@ package com.example.busapp;
 
 import android.os.Build;
 import android.util.Log;
-import org.json.JSONArray;
+
 import org.json.JSONObject;
 import androidx.annotation.RequiresApi;
 
@@ -11,9 +11,12 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -89,7 +92,7 @@ public class BusManager {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static int[] getRouteInfo(String endPointUrl) {
+    private static int[] getRouteInfo(String endPointUrl) {
         try {
             URL url = new URL(endPointUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -114,14 +117,88 @@ public class BusManager {
         return null;
     }
 
+    /**
+     * MJU-SHUTTLE: to STATION
+     * LIVE DATA
+     * @return int "x,x,x,x,x,x"
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static int[] getStationRouteInfo() {
         return getRouteInfo("https://yax35ivans.apigw.ntruss.com/mba/v1/OjJo45tmXK/json");
     }
 
+    /**
+     * MJU-SHUTTLE: to CITY
+     * LIVE DATA
+     * @return int "x,x,x,x,x,x"
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static int[] getCityRouteInfo() {
         return getRouteInfo("https://yax35ivans.apigw.ntruss.com/mba/v1/9KC9LrEB87/json");
+    }
+
+    private static String toDayString(int idx) {
+        return new String[]{"Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"}[idx];
+    }
+
+
+    /**
+     * MJU-SHUTTLE
+     * PAST DATA
+     * @param time
+     * @return
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static int[] predictShuttleTime(String time){
+       return getPastRouteInfo("https://yax35ivans.apigw.ntruss.com/mba/v1/14gvgz0L2D/json", time);
+    }
+
+    /**
+     * BUS
+     * @param time
+     * @return
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static int[] predictBusTime(String time) {
+        return getPastRouteInfo("https://yax35ivans.apigw.ntruss.com/mba/v1/UKRrahCJdv/json", time);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private static int[] getPastRouteInfo(String endpoint, String time) {
+        String day = toDayString(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+        try {
+            URL url = new URL(endpoint);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-type", "application/json");
+
+            conn.setDoOutput(true);
+            String jsonString = "{ \"time\": \"" + time + "\", \"day\": \"" + day + "\"}";
+            OutputStream outputStream = conn.getOutputStream();
+            outputStream.write(jsonString.getBytes(StandardCharsets.UTF_8));
+            outputStream.flush();
+            outputStream.close();
+
+            if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                InputStreamReader inputStreamReader = new InputStreamReader(conn.getInputStream());
+                Stream<String> streamOfString= new BufferedReader(inputStreamReader).lines();
+                String streamToString = streamOfString.collect(Collectors.joining());
+
+                return Arrays.stream(
+                        new JSONObject(streamToString).getString("body").split(",")
+                ).mapToInt(Integer::parseInt)
+                        .toArray();
+            } else {
+                Log.d("POST FUTURE ERROR", String.valueOf(conn.getResponseCode()));
+                Log.d("POST FUTURE ERROR", String.valueOf(conn.getURL()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
     }
 
     public String[] BUS_MJUSTATION_STATIONS() {
