@@ -169,12 +169,13 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
          * =======================================================
          */
         int minCityBus = BusManager.getClosestCityBus();
-
+        // BusManager.predictBusTime("08:00"); --> 08:00
         /**
          * =======================================================
          *           ^__^ NaverMap API 연동 코드 ^__^
          * =======================================================
          */
+        // BusManager.predictShuttleTime({shuttlebus_time})
 
         Log.d("NAVERAPI_RESULT", Arrays.toString(MJUSTATION_TIMEREQUIRE));
         Log.d("NAVERAPI_RESULT", Arrays.toString(CITY_TIMEREQUIRE));
@@ -222,7 +223,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         Log.d("내가 탈 정류장", start);
         Log.d("출발시간", Arrays.toString(startTimes));
         Log.d("도착시간", arrivalTime.getTime());
-
+//        Log.d("TEST : ", Arrays.toString(BusManager.getStationRouteInfo("11:55")));
         //끝값 처리: 오늘 버스 모두 끝났을 때
         if(timeLeft<=0){
             AlertDialog.Builder myAlBuilder=
@@ -241,9 +242,6 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             time_txt.setText(timeLeft + "분");
         }
 
-        //MapView mapView = findViewById(R.id.map_view);
-        //mapView.onCreate(savedInstanceState);
-        //mapView.getMapAsync(this);
     }
 
     //시간표 통합 메서드
