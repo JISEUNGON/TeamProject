@@ -12,8 +12,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_main2_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.BusApp">
+        android:theme="@style/Theme.BusApp"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".LoadingActivity"
+            android:exported="false" />
         <activity
             android:name=".TableActivity"
             android:exported="true" />
