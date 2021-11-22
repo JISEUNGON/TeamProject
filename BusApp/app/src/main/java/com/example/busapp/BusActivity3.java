@@ -272,10 +272,14 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         int stationIndex = 0;
         //버스가 명지대역 버스라면 : 이진 탐색
         if(Search.hasTarget(startTime, MJUSTATION_TIMETABLE)){
+            //현재 시간 != 타겟시간이면
             if(currentTime.totalMin!=targetTime.totalMin){
+                //해당 시간에 예상되는 명지대역 정류장별 소요 시간을 배열에 담는다.
                 MJUSTATION_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
             }
+            //현재 시간 = 타겟시간이면
             else{
+                //현재 시간에 예상되는 정류장별 소요시간을 배열에 담는다.
                 MJUSTATION_TIMEREQUIRE = BusManager.getStationRouteInfo();
             }
 
@@ -291,10 +295,14 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         }
         //버스가 시내 버스라면
         else {
+            //현재 시간 != 타겟시간이면
             if(currentTime.totalMin!=targetTime.totalMin){
+                //해당 시간에 예상되는 시내(셔틀) 정류장별 소요 시간을 배열에 담는다.
                 CITY_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
             }
+            //현재 시간 = 타겟시간이면
             else{
+                //현재 시간에 예상되는 시내(셔틀) 소요시간을 배열에 담는다.
                 CITY_TIMEREQUIRE = BusManager.getCityRouteInfo();
             }
             for (int i = 0; i < CITY_STATIONS.length; i++) {
