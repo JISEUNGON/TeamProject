@@ -1,0 +1,3 @@
+[submodule "TeamProject-Server"]
+	path = TeamProject-Server
+	url = git@github.com:BEMELON/TeamProject-Server.git
