@@ -1,18 +1,13 @@
 package com.example.busapp;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,25 +15,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 import android.app.AlertDialog;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
 
 public class MainActivity2 extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePicker.OnTimeChangedListener{
 
@@ -53,6 +42,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
 
     // 도착지, 출발지, 시간
     String start_str, arrival_str, hour_str, min_str;
+    String cur_time;
     // 버스 종류
     String bus_str;
 
@@ -110,6 +100,10 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         start_str = sp1.getSelectedItem().toString();
         // 도착지 값 저장
         arrival_str = sp2.getSelectedItem().toString();
+        // 현재 시간 저장
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
+        cur_time = dateFormat.format(System.currentTimeMillis());
+        // 현재 분 저장
 
         // 정류장을 선택했을 경우입니다.
         if(start_str.equals("정류장")){
@@ -121,7 +115,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
             intent.putExtra("min", min_str);
             intent.putExtra("start", start_str);
             intent.putExtra("arrival", arrival_str);
-
+            intent.putExtra("currentTime", cur_time);
             // 진입로를 선택했을 경우입니다.
             // 대화상자가 보여집니다.
             if(start_str.equals("진입로(명지대방향)")){

@@ -54,6 +54,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
     // 변수들
     String hour, min;
     String start,arrival;
+    String time;
     String busType;
     // 출발지
     TextView start_txt;
@@ -70,6 +71,8 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
 
     //버스 출발 시간
     String[] startTimes;
+    //현재 시간
+    DateFormat currentTime;
     //버스가 도착할 시간
     DateFormat arrivalTime;
     //입력받은 시간
@@ -105,12 +108,9 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         busManager = new BusManager(getResources().openRawResource(R.raw.businfo));
 
         MJUSTATION_STATIONS = busManager.BUS_MJUSTATION_STATIONS();
-        MJUSTATION_TIMEREQUIRE = BusManager.getStationRouteInfo();
         MJUSTATION_TIMETABLE = busManager.BUS_MJUSTATION_TIMETABLE();
         CITY_STATIONS = busManager.BUS_CITY_STATIONS();
-        CITY_TIMEREQUIRE =  BusManager.getCityRouteInfo();
         CITY_TIMETABLE = busManager.BUS_CITY_TIMETABLE();
-
         // 데이터를 저장합니다.
         Intent intent = getIntent();
 
@@ -118,6 +118,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         busType = intent.getStringExtra("bus");
         //Toast.makeText(BusActivity3.this, bus, Toast.LENGTH_LONG).show();
 
+        time = intent.getStringExtra("currentTime");
         hour = intent.getStringExtra("hour");
         min = intent.getStringExtra("min");
         if(Integer.parseInt(min)<10){
@@ -126,6 +127,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         start = intent.getStringExtra("start");
         arrival = intent.getStringExtra("arrival");
         targetTime = new DateFormat(hour + ":" + min);
+        currentTime = new DateFormat(time);
 
         //타겟시간에 대한 가까운 셔틀 버스찾기 : 1차 알고리즘 작성 (메서드 분리 이전, 기능 별 항목 구현)
         //MJUSTATION과 CITYSTATION 모두 포함한다면: 두 버스 모두 지나가는 정류장 (이 때 시간을 정렬해서 새로운 시간표를 만든다)
@@ -170,15 +172,13 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
          */
         int minCityBus = BusManager.getClosestCityBus();
         // BusManager.predictBusTime("08:00"); --> 08:00
+        //가장 가깝게 도착한
         /**
          * =======================================================
          *           ^__^ NaverMap API 연동 코드 ^__^
          * =======================================================
          */
-        // BusManager.predictShuttleTime({shuttlebus_time})
 
-        Log.d("NAVERAPI_RESULT", Arrays.toString(MJUSTATION_TIMEREQUIRE));
-        Log.d("NAVERAPI_RESULT", Arrays.toString(CITY_TIMEREQUIRE));
         //3차 알고리즘: 다이얼로그 값에 따라 남은 시간 설정 다르게 하기
         //진입로가 선택됐을 때 다이얼로그 출력: 선택된 값에 따라 timeLeft값 설정
         // timeLeft: 가장 가까운 버스가 남은 시간
@@ -218,11 +218,6 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             timeLeft = DateFormat.compare(arrivalTime.getTime(), targetTime.getTime());
         }
 
-        //테스트 데이터 출력
-        Log.d("타겟시간", targetTime.getTime());
-        Log.d("내가 탈 정류장", start);
-        Log.d("출발시간", Arrays.toString(startTimes));
-        Log.d("도착시간", arrivalTime.getTime());
 //        Log.d("TEST : ", Arrays.toString(BusManager.getStationRouteInfo("11:55")));
         //끝값 처리: 오늘 버스 모두 끝났을 때
         if(timeLeft<=0){
@@ -242,7 +237,17 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             time_txt.setText(timeLeft + "분");
         }
 
+        //테스트 데이터 출력
+        Log.d("타겟시간", targetTime.getTime());
+        Log.d("내가 탈 정류장", start);
+        Log.d("출발시간", Arrays.toString(startTimes));
+        Log.d("도착시간", arrivalTime.getTime());
+        Log.d("명지대역 버스 정류장별 예상 소요 시간", Arrays.toString(MJUSTATION_TIMEREQUIRE));
+        Log.d("시내(셔틀) 버스 정류장병 예상 소요 시간", Arrays.toString(CITY_TIMEREQUIRE));
+
     }
+
+
 
     //시간표 통합 메서드
     //두 시간표를 통합하여 시간별로 sort후, 반환한다.s
@@ -260,13 +265,20 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
     //도착 시간 구하기 메서드
     //INPUT: 도착 정류장, 버스 출발시간
     //도착 정류장이 어떤 TIMETABLE에 속해있는지 판단 한 후, 해당 노선도의 TIMEREQUIRE테이블을 이용해서 도착 정류장에 버스가 도착할 시간을 반환한다.
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public DateFormat getArrivalTime(String startStation, String startTime){
-
         DateFormat arrivalTime = new DateFormat(startTime);
 
         int stationIndex = 0;
         //버스가 명지대역 버스라면 : 이진 탐색
         if(Search.hasTarget(startTime, MJUSTATION_TIMETABLE)){
+            if(currentTime.totalMin!=targetTime.totalMin){
+                MJUSTATION_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
+            }
+            else{
+                MJUSTATION_TIMEREQUIRE = BusManager.getStationRouteInfo();
+            }
+
             for (int i = 0; i < MJUSTATION_STATIONS.length; i++) {
                 if (MJUSTATION_STATIONS[i].equals(startStation)) {
                     stationIndex = i;
@@ -279,6 +291,12 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         }
         //버스가 시내 버스라면
         else {
+            if(currentTime.totalMin!=targetTime.totalMin){
+                CITY_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
+            }
+            else{
+                CITY_TIMEREQUIRE = BusManager.getCityRouteInfo();
+            }
             for (int i = 0; i < CITY_STATIONS.length; i++) {
                 if (CITY_STATIONS[i].equals(start)) {
                     stationIndex = i;
@@ -294,6 +312,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
     //도착 버스 시간 비교 메서드
     //INPUT : 도착 정류장, 2개의 버스출발시간(타겟시간 이전버스, 타겟시간 이후버스)
     //직전 버스, 이후 버스 중 어떤 버스가 먼저 도착할 지 판단한 후 먼저 도착하는 버스의 도착시간을 반환한다.
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public DateFormat compareArrivalTime(String startStation, String [] startTimes, String targetTime){
 
         DateFormat arrivalTime;
