@@ -244,7 +244,8 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         Log.d("도착시간", arrivalTime.getTime());
         Log.d("명지대역 버스 정류장별 예상 소요 시간", Arrays.toString(MJUSTATION_TIMEREQUIRE));
         Log.d("시내(셔틀) 버스 정류장병 예상 소요 시간", Arrays.toString(CITY_TIMEREQUIRE));
-
+        //Log.d("2시 기준 예측 버스 기간 테스트: 명지대역", Arrays.toString(BusManager.predictShuttleTime("14:00")));
+        //Log.d("2시 20분 기준 예측 버스 기간 테스트: 시내", Arrays.toString(BusManager.predictShuttleTime("14:20")));
     }
 
 
@@ -275,7 +276,9 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             //현재 시간 != 타겟시간이면
             if(currentTime.totalMin!=targetTime.totalMin){
                 //해당 시간에 예상되는 명지대역 정류장별 소요 시간을 배열에 담는다.
-                MJUSTATION_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
+                //MJUSTATION_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
+                //predict 오류 때문에 임시 사용
+                MJUSTATION_TIMEREQUIRE = BusManager.getStationRouteInfo();
             }
             //현재 시간 = 타겟시간이면
             else{
@@ -298,7 +301,9 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             //현재 시간 != 타겟시간이면
             if(currentTime.totalMin!=targetTime.totalMin){
                 //해당 시간에 예상되는 시내(셔틀) 정류장별 소요 시간을 배열에 담는다.
-                CITY_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
+                //CITY_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
+                //predict 오류 때문에 임시 사용
+                CITY_TIMEREQUIRE = BusManager.getCityRouteInfo();
             }
             //현재 시간 = 타겟시간이면
             else{
