@@ -6,6 +6,8 @@ import android.util.Log;
 import org.json.JSONObject;
 import androidx.annotation.RequiresApi;
 
+import com.google.gson.JsonParser;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedReader;
@@ -106,8 +108,10 @@ public class BusManager {
                 InputStreamReader inputStreamReader = new InputStreamReader(conn.getInputStream());
                 Stream<String> streamOfString = new BufferedReader(inputStreamReader).lines();
                 String streamToString = streamOfString.collect(Collectors.joining());
-                if (streamOfString.equals("")) return 9999;
-                else return Integer.parseInt(streamToString);
+
+                String timeLeft = JsonParser.parseString(streamToString).getAsJsonObject().get("body").toString();
+                if (timeLeft.equals("")) return 9999;
+                else return Integer.parseInt(timeLeft);
             } else {
                 rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
                 Log.d("ERROR", rd.readLine());

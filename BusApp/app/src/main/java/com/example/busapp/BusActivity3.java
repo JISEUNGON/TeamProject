@@ -198,7 +198,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
                 case "통합":
                     Log.d("정류장체크", "진입로 :case 통합");
                     //만약 시내버스가 있다면
-                    if(minCityBus!=-1){
+                    if(minCityBus!= 9999){
                         //시내버스와 셔틀버스를 비교해서 더 빠른 것을 반환
                         timeLeft = Math.min(minCityBus, DateFormat.compare(arrivalTime.getTime(), targetTime.getTime()));
                     }
@@ -315,7 +315,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
                     stationIndex = i;
                 }
             }
-            for(int i =0; i<=stationIndex; i++){
+            for(int i =0; i<stationIndex; i++){
                 arrivalTime.addTime(CITY_TIMEREQUIRE[i]);
             }
         }
