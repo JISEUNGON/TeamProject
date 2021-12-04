@@ -1,8 +1,17 @@
 package com.example.busapp;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraAnimation;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.NaverMap;
+import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.overlay.Overlay;
+import com.naver.maps.map.overlay.OverlayImage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +65,7 @@ public class MapMarkerManager {
         for(Marker marker: markerArrayList) marker.setMap(null);
         markerArrayList = new ArrayList<>();
 
-        String[] targetStations = new String[0];
+        String[] targetStations;
         if(city && !station) {
             targetStations = new String[]{"명지대", "상공회의소", "진입로", "진입로(명지대방향)", "이마트", "동부경찰서", "용인시장", "중앙공영주차장", "제1공학관", "제3공학관"};
         } else if (!city && station) {
@@ -64,11 +73,40 @@ public class MapMarkerManager {
         } else {
             return;
         }
+
         for(String _station: targetStations) {
             Marker marker = new Marker();
             Double[] position = stationInfo.get(_station);
             marker.setPosition(new LatLng(position[0], position[1]));
             marker.setCaptionText(_station);
+            InfoWindow infoWindow = new InfoWindow();
+            infoWindow.setAdapter(new InfoWindow.Adapter() {
+                @NonNull
+                @Override
+                public OverlayImage getImage(@NonNull InfoWindow infoWindow) {
+                    switch (_station) {
+                        case "상공회의소": return OverlayImage.fromResource(R.drawable.mju_chamber);
+                        case "진입로(명지대방향)": return OverlayImage.fromResource(R.drawable.mju_entry_to_school);
+                        case "이마트": return OverlayImage.fromResource(R.drawable.mju_emart);
+                        case "용인시장": return OverlayImage.fromResource(R.drawable.mju_parking_lot);
+                        case "동부경찰서": return OverlayImage.fromResource(R.drawable.mju_police_office);
+                        case "명지대역": return OverlayImage.fromResource(R.drawable.mju_station);
+                        default: return OverlayImage.fromResource(R.drawable.mju_ready);
+                    }
+                }
+            });
+            marker.setOnClickListener(overlay -> {
+                naverMap.moveCamera(CameraUpdate.scrollAndZoomTo(
+                        new LatLng(position[0], position[1]),18)
+                        .animate(CameraAnimation.Fly, 3000));
+
+                for(Marker mkr: markerArrayList)
+                    if(mkr.hasInfoWindow()) mkr.getInfoWindow().close();
+                infoWindow.open(marker);
+                return true;
+            });
+
+
             marker.setMap(naverMap);
             markerArrayList.add(marker);
         }

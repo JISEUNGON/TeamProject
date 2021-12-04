@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     // 노선도 보기클릭시 화면 이동
     public void tableBt(View v){
         // 화면 전환합니다
-        Intent intent = new Intent(getApplicationContext(), TableActivity.class);
+        Intent intent = new Intent(getApplicationContext(), BusInfoActivity.class);
         startActivity(intent);
 
     }

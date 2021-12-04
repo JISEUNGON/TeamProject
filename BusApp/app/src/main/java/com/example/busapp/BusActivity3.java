@@ -40,15 +40,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-
-class ProcessHandler extends Handler {
-    @Override
-    public void handleMessage(@NonNull Message msg) {
-        super.handleMessage(msg);
-    }
-}
-
-
 public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallback {
 
     // 변수들
@@ -390,6 +381,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
                 mapMarkerManager.getPosition(start),15)
                 .animate(CameraAnimation.Fly, 3000);
         naverMap.moveCamera(cameraUpdate);
+        naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_TRANSIT, true);
         naverMap.setLocationSource(new FusedLocationSource(this, 1000));
 
         // UI 재배치

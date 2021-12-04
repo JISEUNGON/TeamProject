@@ -82,10 +82,6 @@ public class BusInfoActivity extends AppCompatActivity implements AdapterView.On
         TableLayout tableLayout = (TableLayout) findViewById(R.id.bus_timeTable);
         tableLayout.removeAllViews();
         /**
-         * 승언님 여기서 작성하시면 될 것 같습니다.  부탁드려요
-         * https://1d1cblog.tistory.com/140
-         * 저도 요기 참고해서 코드 작성했으니 참고해보세용
-         *
          * busSpinner_position
          *      0: X
          *      1: 명지대역
@@ -178,6 +174,7 @@ public class BusInfoActivity extends AppCompatActivity implements AdapterView.On
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap = naverMap;
+        naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_TRANSIT, true);
         mapMarkerManager = new MapMarkerManager(naverMap);
         mapPolyManager = new MapPolyManager(naverMap);
 
