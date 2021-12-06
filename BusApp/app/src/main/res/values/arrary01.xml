@@ -3,7 +3,6 @@
     <string-array name="list01">
         <item>정류장</item>
         <item>상공회의소</item>
-        <item>진입로</item>
         <item>진입로(명지대방향)</item>
         <item>명지대역</item>
         <item>동부경찰서</item>
@@ -11,9 +10,6 @@
         <item>중앙공영주차장</item>
         <item>진입로</item>
         <item>이마트</item>
-        <item>명진당</item>
-        <item>제1공학관</item>
-        <item>제3공학관</item>
     </string-array>
     <string-array name="busCat">
         <item>노선을 선택해주세요</item>

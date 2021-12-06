@@ -50,8 +50,6 @@
         <item>명지대역</item>
         <item>진입로(명지대방향)</item>
         <item>이마트</item>
-        <item>명진당</item>
-        <item>제3공학관</item>
     </string-array>
     <string-array name="BUS_GIHEUNG_TIMETABLE">
         <item>8:00</item>
@@ -103,7 +101,5 @@
         <item>중앙공영주차장</item>
         <item>진입로(명지대방향)</item>
         <item>이마트</item>
-        <item>제1공학관</item>
-        <item>3공학관</item>
     </string-array>
 </resources>

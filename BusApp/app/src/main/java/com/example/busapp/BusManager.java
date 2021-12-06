@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import androidx.annotation.RequiresApi;
 
 import com.google.gson.JsonParser;
-
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedReader;
@@ -190,8 +189,9 @@ public class BusManager {
     }
 
     private static String toDayString(int idx) {
-        return new String[]{"Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"}[idx];
+        return new String[]{"Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"}[idx];
     }
+
 
 
     public String[] BUS_MJUSTATION_STATIONS() {

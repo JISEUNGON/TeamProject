@@ -17,9 +17,6 @@
         <activity
             android:name=".LoadingActivity"
             android:exported="false" />
-        <activity
-            android:name=".TableActivity"
-            android:exported="true" />
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
@@ -52,6 +49,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>
