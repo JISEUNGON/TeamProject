@@ -189,7 +189,7 @@ public class BusManager {
     }
 
     private static String toDayString(int idx) {
-        return new String[]{"Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"}[idx];
+        return new String[]{"Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"}[idx - 1];
     }
 
 
