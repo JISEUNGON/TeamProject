@@ -7,19 +7,26 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.CameraAnimation;
@@ -39,6 +46,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 
 public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -148,11 +156,11 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         //데이터 적용
-        start_txt = findViewById(R.id.textView6);
-        start_txt.setText(start);
-
-        arrival_txt = findViewById(R.id.textView7);
-        arrival_txt.setText(arrival);
+//        start_txt = findViewById(R.id.textView6);
+//        start_txt.setText(start);
+//
+//        arrival_txt = findViewById(R.id.textView7);
+//        arrival_txt.setText(arrival);
 
         time_txt = findViewById(R.id.textView10);
         /**
@@ -235,7 +243,56 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         Log.d("정류장 도착시간", arrivalTime.getTime());
         Log.d("명지대역 버스 정류장별 예상 소요 시간", Arrays.toString(MJUSTATION_TIMEREQUIRE));
         Log.d("시내(셔틀) 버스 정류장병 예상 소요 시간", Arrays.toString(CITY_TIMEREQUIRE));
-        Log.d("END", "-----------------------------------------------------------");
+        Log.d("END", "----------------------------");
+
+        // =============================
+        // 버스 노선도 입니다  >.<
+        // =============================
+
+        // 리스트뷰 생성
+        ListView lv = findViewById(R.id.listview01);
+
+        // adapter연결 및 생성
+        BusstationList listAdapter = new BusstationList();
+        lv.setAdapter(listAdapter);
+
+
+        // 거쳐가는 정류장 배열 생성
+        String arrlist[] = intent.getStringArrayExtra("restStation");
+
+        int length = arrlist.length;
+
+        // 출발지 추가
+        listAdapter.addStation(ContextCompat.getDrawable(this, R.drawable.start_busimg), start);
+
+        for(int i=0; i < length; i++){
+            listAdapter.addStation(ContextCompat.getDrawable(this, R.drawable.center_busimg), arrlist[i]);
+        }
+
+        // 도착지 추가
+        listAdapter.addStation(ContextCompat.getDrawable(this, R.drawable.arrival_busimg), arrival);
+
+        //System.out.println(length);
+        //Toast.makeText(this, a, Toast.LENGTH_SHORT).show();
+
+        /*
+        for(int i=0; i <= arrlist.length; i++){
+
+        String s = arrlist[i];
+
+            if(i == 0){
+                listAdapter.addStation(ContextCompat.getDrawable(this, R.drawable.start_busimg), start);
+            }
+            else if(i == arrlist.length){
+                listAdapter.addStation(ContextCompat.getDrawable(this, R.drawable.arrival_busimg), arrival);
+            }
+            else{
+                listAdapter.addStation(ContextCompat.getDrawable(this, R.drawable.center_busimg), s);
+            }
+        }
+        */
+
+
     }
 
 
@@ -266,13 +323,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             //현재 시간 != 타겟시간이면
             if(currentTime.totalMin!=targetTime.totalMin){
                 //해당 시간에 예상되는 명지대역 정류장별 소요 시간을 배열에 담는다.
-               //MJUSTATION_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
-                //predict 오류 때문에 임시 사용
-                MJUSTATION_TIMEREQUIRE = BusManager.getStationRouteInfo();
-
-//                Log.d("버스출발시간(명지대역버스)", startTime);
-//                Log.d("정류장별 소요시간(명지대역버스)_미래과거", Arrays.toString(BusManager.predictShuttleTime(startTime)));
-//                Log.d("정류장별 소요시간(명지대역버스)_현재시간", Arrays.toString(MJUSTATION_TIMEREQUIRE));
+                MJUSTATION_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
             }
             //현재 시간 = 타겟시간이면
             else{
@@ -295,12 +346,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             //현재 시간 != 타겟시간이면
             if(currentTime.totalMin!=targetTime.totalMin){
                 //해당 시간에 예상되는 시내(셔틀) 정류장별 소요 시간을 배열에 담는다.
-                //CITY_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
-                //predict 오류 때문에 임시 사용
-                CITY_TIMEREQUIRE = BusManager.getCityRouteInfo();
-//                Log.d("버스출발시간(시내버스)", startTime);
-//                Log.d("정류장별 소요시간(시내버스)_미래과거", Arrays.toString(BusManager.predictShuttleTime(startTime)));
-//                Log.d("정류장별 소요시간(명지대역버스)_현재시간", Arrays.toString(CITY_TIMEREQUIRE));
+                CITY_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
             }
             //현재 시간 = 타겟시간이면
             else{
@@ -387,7 +433,6 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
                 mapMarkerManager.getPosition(start),15)
                 .animate(CameraAnimation.Fly, 3000);
         naverMap.moveCamera(cameraUpdate);
-        naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_TRANSIT, true);
         naverMap.setLocationSource(new FusedLocationSource(this, 1000));
 
         // UI 재배치

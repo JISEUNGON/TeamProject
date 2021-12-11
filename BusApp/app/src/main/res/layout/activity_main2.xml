@@ -23,7 +23,8 @@
         android:id="@+id/imageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="70dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="50dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/curr_time"
         android:onClick="setCurrLocation"
@@ -32,8 +33,8 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timepicker"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/curtimeset"
+        app:layout_constraintVertical_bias="0.58000004"
+        app:srcCompat="@drawable/curlocationset"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <ImageButton
@@ -46,7 +47,7 @@
         android:onClick="setCurrTime"
         app:layout_constraintBottom_toTopOf="@+id/spinner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timepicker"
         app:layout_constraintVertical_bias="0.0"
