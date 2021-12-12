@@ -146,21 +146,12 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         else if(Search.hasTarget(start, CITY_STATIONS)){
             startTimes = Search.FindClosestBus(targetTime.getTime(), CITY_TIMETABLE);
             arrivalTime = compareArrivalTime(start, startTimes, targetTime.getTime());
-            //Log.d("노선", "CITY");
         }
         //출발지 정류장이 만약 MJSTATION_STATIONS에만 있다면: 명지대역버스만 지나가는 정류장
         else{
             startTimes = Search.FindClosestBus(targetTime.getTime(), MJUSTATION_TIMETABLE);
             arrivalTime = compareArrivalTime(start, startTimes, targetTime.getTime());
-            //Log.d("노선", "MJ");
         }
-
-        //데이터 적용
-//        start_txt = findViewById(R.id.textView6);
-//        start_txt.setText(start);
-//
-//        arrival_txt = findViewById(R.id.textView7);
-//        arrival_txt.setText(arrival);
 
         time_txt = findViewById(R.id.textView10);
         /**
@@ -245,6 +236,18 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         Log.d("시내(셔틀) 버스 정류장병 예상 소요 시간", Arrays.toString(CITY_TIMEREQUIRE));
         Log.d("END", "----------------------------");
 
+        //메서드 테스트 출력
+       // Log.d("예측테스트 명지대역(10:30)", Arrays.toString(BusManager.predictShuttleTime("10:30")));
+        //Log.d("예측테스트 명지대역(14:30)", Arrays.toString(BusManager.predictShuttleTime("14:30")));
+        //Log.d("예측테스트 명지대역(15:55)", Arrays.toString(BusManager.predictShuttleTime("15:55")));
+//        Log.d("예측테스트 시내(08:20)", Arrays.toString(BusManager.predictShuttleTime("08:20")));
+//        Log.d("예측테스트 시내(13:20)", Arrays.toString(BusManager.predictShuttleTime("13:20")));
+//        Log.d("예측테스트 시내(15:20)", Arrays.toString(BusManager.predictShuttleTime("15:20")));
+//        Log.d("예측테스트 시내(16:20)", Arrays.toString(BusManager.predictShuttleTime("16:20")));
+//        Log.d("예측테스트 시내(16:35)", Arrays.toString(BusManager.predictShuttleTime("17:20")));
+//        Log.d("예측테스트 시내(17:20)", Arrays.toString(BusManager.predictShuttleTime("17:20")));
+//        Log.d("예측테스트 시내(18:00)", Arrays.toString(BusManager.predictShuttleTime("18:00")));
+        //Log.d("예측테스트 광역버스(14:24)", Arrays.toString(BusManager.predictBusTime("14:10")));
         // =============================
         // 버스 노선도 입니다  >.<
         // =============================
@@ -323,6 +326,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             //현재 시간 != 타겟시간이면
             if(currentTime.totalMin!=targetTime.totalMin) {
                 //해당 시간에 예상되는 명지대역 정류장별 소요 시간을 배열에 담는다.
+                //만약에 서버 고치시면 여기라인 위 아래 바꾸면 됩니다.
                 //MJUSTATION_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
                 MJUSTATION_TIMEREQUIRE = BusManager.getStationRouteInfo();
             }
@@ -341,6 +345,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             //현재 시간 != 타겟시간이면
             if(currentTime.totalMin!=targetTime.totalMin){
                 //해당 시간에 예상되는 시내(셔틀) 정류장별 소요 시간을 배열에 담는다.
+                //만약에 서버 고치시면 여기라인 위 아래 바꾸면 됩니다.
                 //CITY_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
                 CITY_TIMEREQUIRE = BusManager.getCityRouteInfo();
             }

@@ -28,6 +28,9 @@ import androidx.core.content.ContextCompat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class MainActivity2 extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePicker.OnTimeChangedListener{
 
@@ -222,29 +225,32 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
 
     // 현재시간으로 설정
     public void setCurrTime(View v){
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int min = calendar.get(Calendar.MINUTE);
+        SimpleDateFormat sdfNow = new SimpleDateFormat("HH:mm", Locale.KOREAN);
+        TimeZone tz = TimeZone.getTimeZone("Asia/Seoul");
+        sdfNow.setTimeZone(tz);
+        String now = sdfNow.format(new Date(System.currentTimeMillis()));
 
+        String[] hour_min = now.split(":");
+
+        int hour = Integer.parseInt(hour_min[0]);
+        int min = Integer.parseInt(hour_min[1]);
         timePicker.setCurrentHour(hour);
         timePicker.setCurrentMinute(min);
-
     }
 
     // 추후 현재 위치 버튼으로 연동할 부분
     public void setCurrLocation(View v) {
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-
         if(permissionCheck == PackageManager.PERMISSION_DENIED){ //포그라운드 위치 권한 확인
             //위치 권한 요청
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
-
         try {
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
+            Log.d("setCurrLocation","aaaaaa");
             sp1.setSelection(getIndex(Search.FindClosestStation(location)), true);
+
 //            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, location1 -> sp1.setSelection(getIndex(Search.FindClosestStation(location1)), true));
 //            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, location1 -> sp1.setSelection(getIndex(Search.FindClosestStation(location1)), true));
 
