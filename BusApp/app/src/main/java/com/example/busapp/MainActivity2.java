@@ -20,19 +20,26 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.app.AlertDialog;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class MainActivity2 extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePicker.OnTimeChangedListener{
+public class MainActivity2 extends AppCompatActivity implements AdapterView.OnItemSelectedListener, TimePicker.OnTimeChangedListener {
 
     //////////////변수들//////////////
     // 타임피커
@@ -91,7 +98,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
 
     // 버스찾기 버튼 누른후
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void SearchBus(View v){
+    public void SearchBus(View v) {
 
         // 문자열에 시간, 출발지, 도착지를 저장합니다.
 
@@ -109,7 +116,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         // 현재 분 저장
 
         // 정류장을 선택했을 경우입니다.
-        if(start_str.equals("정류장")){
+        if (start_str.equals("정류장")) {
 
         } else {
             // intent에 데이터를 저장합니다.
@@ -121,10 +128,10 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
             intent.putExtra("currentTime", cur_time);
             // 진입로를 선택했을 경우입니다.
             // 대화상자가 보여집니다.
-            if(start_str.equals("진입로(명지대방향)")){
+            if (start_str.equals("진입로(명지대방향)")) {
 
                 // 버스 목록입니다.
-                String[] buss_list = new String[] {"시내버스", "셔틀버스", "셔틀버스,시내버스 통합"};
+                String[] buss_list = new String[]{"시내버스", "셔틀버스", "셔틀버스,시내버스 통합"};
 
                 // 다이얼로그 생성
                 AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity2.this);
@@ -138,15 +145,13 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
                         //button1.setText(buss_list[which]);
 
                         // 어느 버스 선택했는지 확인합니다.
-                        if(buss_list[which] == "시내버스"){
+                        if (buss_list[which] == "시내버스") {
                             bus_str = "시내버스";
                             //Toast.makeText(MainActivity2.this, "시내버스", Toast.LENGTH_LONG).show();
-                        }
-                        else if(buss_list[which] == "셔틀버스"){
+                        } else if (buss_list[which] == "셔틀버스") {
                             bus_str = "셔틀버스";
                             //Toast.makeText(MainActivity2.this, "셔틀버스", Toast.LENGTH_LONG).show();
-                        }
-                        else{
+                        } else {
                             bus_str = "통합";
                         }
                     }
@@ -159,7 +164,7 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // intent에 데이터를 저장합니다.
                         intent.putExtra("bus", bus_str);
-                        intent.putExtra("restStation", new String[] {"이마트"});
+                        intent.putExtra("restStation", new String[]{"이마트"});
                         // 화면 전환합니다
                         startActivity(intent);
                     }
@@ -174,21 +179,20 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
                 });
 
                 dlg.show();
-            }
-            else{
+            } else {
                 // 화면 전환합니다
                 String[] restStation = null; // 앞으로의 정류장
                 String[] stationInfo = MapMarkerManager.getStationInfo(); // 전체 정류장
-                for(int i=0; i< stationInfo.length; i++) {
-                    if(stationInfo[i].equals(start_str)) {
+                for (int i = 0; i < stationInfo.length; i++) {
+                    if (stationInfo[i].equals(start_str)) {
                         restStation = Arrays.copyOfRange(stationInfo, i + 1, stationInfo.length - 2);
                     }
                 }
-                if(restStation == null) {
+                if (restStation == null) {
                     stationInfo = MapMarkerManager.getCityInfo();
-                    for(int i=0; i<stationInfo.length; i++) {
-                        if(stationInfo[i].equals(start_str)) {
-                            restStation = Arrays.copyOfRange(stationInfo, i+ 1, stationInfo.length - 2);
+                    for (int i = 0; i < stationInfo.length; i++) {
+                        if (stationInfo[i].equals(start_str)) {
+                            restStation = Arrays.copyOfRange(stationInfo, i + 1, stationInfo.length - 2);
                         }
                     }
                 }
@@ -218,13 +222,13 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
         //h\\ = String.valueOf(hourOfDay);
         //m = String.valueOf(minute);
 
-        ((TextView)view.getChildAt(0)).setTextColor(Color.WHITE);
+        ((TextView) view.getChildAt(0)).setTextColor(Color.WHITE);
 
 
     }
 
     // 현재시간으로 설정
-    public void setCurrTime(View v){
+    public void setCurrTime(View v) {
         SimpleDateFormat sdfNow = new SimpleDateFormat("HH:mm", Locale.KOREAN);
         TimeZone tz = TimeZone.getTimeZone("Asia/Seoul");
         sdfNow.setTimeZone(tz);
@@ -241,14 +245,16 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
     // 추후 현재 위치 버튼으로 연동할 부분
     public void setCurrLocation(View v) {
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        if(permissionCheck == PackageManager.PERMISSION_DENIED){ //포그라운드 위치 권한 확인
+        if (permissionCheck == PackageManager.PERMISSION_DENIED) { //포그라운드 위치 권한 확인
             //위치 권한 요청
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
         try {
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            Log.d("setCurrLocation","aaaaaa");
+//            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location location = getLastKnownLocation();
+
+            Log.d("setCurrLocation", "aaaaaa");
             sp1.setSelection(getIndex(Search.FindClosestStation(location)), true);
 
 //            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, location1 -> sp1.setSelection(getIndex(Search.FindClosestStation(location1)), true));
@@ -261,9 +267,35 @@ public class MainActivity2 extends AppCompatActivity implements AdapterView.OnIt
 
     private int getIndex(String station) {
         String[] stations = getResources().getStringArray(R.array.list01);
-        for(int i=0; i<stations.length; i++)
-            if(station.equals(stations[i])) return i;
+        for (int i = 0; i < stations.length; i++)
+            if (station.equals(stations[i])) return i;
         return -1;
     }
 
+    private Location getLastKnownLocation() {
+        LocationManager mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+        List<String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return null;
+            }
+            Location l = mLocationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
+    }
 }

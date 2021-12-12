@@ -84,9 +84,9 @@ public class BusManager {
      * @return
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static int[] predictBusTime(String time) {
+    public static int predictBusTime(String time) {
         int[] routeInfo = getPastRouteInfo("https://yax35ivans.apigw.ntruss.com/mba/v1/UKRrahCJdv/json", time);
-        return routeInfo;
+        return routeInfo[0];
     }
 
     /**
