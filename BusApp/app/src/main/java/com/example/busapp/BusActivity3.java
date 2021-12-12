@@ -218,7 +218,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
 
 //        Log.d("TEST : ", Arrays.toString(BusManager.getStationRouteInfo("11:55")));
         //끝값 처리: 오늘 버스 모두 끝났을 때
-        if(timeLeft<=0){
+        if(timeLeft<=0 || timeLeft==9999){
             AlertDialog.Builder myAlBuilder=
                     new AlertDialog.Builder(BusActivity3.this);
             myAlBuilder.setMessage("금일 버스가 모두 운행 종료되었습니다.");
@@ -321,16 +321,11 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
         //버스가 명지대역 버스라면 : 이진 탐색
         if(Search.hasTarget(startTime, MJUSTATION_TIMETABLE)){
             //현재 시간 != 타겟시간이면
-            if(currentTime.totalMin!=targetTime.totalMin){
+            if(currentTime.totalMin!=targetTime.totalMin) {
                 //해당 시간에 예상되는 명지대역 정류장별 소요 시간을 배열에 담는다.
-                MJUSTATION_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
-            }
-            //현재 시간 = 타겟시간이면
-            else{
-                //현재 시간에 예상되는 정류장별 소요시간을 배열에 담는다.
+                //MJUSTATION_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
                 MJUSTATION_TIMEREQUIRE = BusManager.getStationRouteInfo();
             }
-
             for (int i = 0; i < MJUSTATION_STATIONS.length; i++) {
                 if (MJUSTATION_STATIONS[i].equals(startStation)) {
                     stationIndex = i;
@@ -346,11 +341,7 @@ public class BusActivity3 extends AppCompatActivity implements OnMapReadyCallbac
             //현재 시간 != 타겟시간이면
             if(currentTime.totalMin!=targetTime.totalMin){
                 //해당 시간에 예상되는 시내(셔틀) 정류장별 소요 시간을 배열에 담는다.
-                CITY_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
-            }
-            //현재 시간 = 타겟시간이면
-            else{
-                //현재 시간에 예상되는 시내(셔틀) 소요시간을 배열에 담는다.
+                //CITY_TIMEREQUIRE = BusManager.predictShuttleTime(startTime);
                 CITY_TIMEREQUIRE = BusManager.getCityRouteInfo();
             }
             for (int i = 0; i < CITY_STATIONS.length; i++) {
